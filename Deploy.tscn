@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Deploy.gd" type="Script" id=1]
+[ext_resource path="res://GameState.tscn" type="PackedScene" id=2]
+
+[node name="Deploy" type="Node"]
+script = ExtResource( 1 )
+
+[node name="GameState" parent="." instance=ExtResource( 2 )]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_top = 20.0
+margin_bottom = 20.0
+
+[node name="Finish Deployment" type="Button" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 857.0
+margin_top = 559.0
+margin_right = -34.0
+margin_bottom = -20.0
+text = "Finish Deployment"
+
+[connection signal="pressed" from="Finish Deployment" to="." method="_on_Finish_Deployment_pressed"]
