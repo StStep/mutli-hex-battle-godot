@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://TurnX.gd" type="Script" id=1]
 [ext_resource path="res://GameState.tscn" type="PackedScene" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
 
 [node name="TurnX" type="Node"]
 script = ExtResource( 1 )
@@ -21,5 +22,9 @@ margin_top = 559.7
 margin_right = -53.8229
 margin_bottom = -20.2997
 text = "Finish"
+
+[node name="icon" type="Sprite" parent="."]
+position = Vector2( 540, 300 )
+texture = ExtResource( 3 )
 
 [connection signal="pressed" from="Finish" to="." method="_on_Finish_pressed"]
