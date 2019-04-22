@@ -1,0 +1,3 @@
+Repo: https://github.com/romlok/godot-gdhexgrid
+Commit: d28b7ce6881e265ea5dbb2aa6acb06115f7882a2
+Date: 04/19/2019
