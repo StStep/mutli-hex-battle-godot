@@ -47,18 +47,8 @@ func _init(ref = null).():
 func _ready():
 	set_form_a()
 
-var form_a = true
-func _unhandled_input(event):
-	if event is InputEventMouseMotion:
-		set_front_to(Vector2(0, 1).angle_to((get_global_mouse_position() - global_position)))
-		update()
-
-func _draw():
-	draw_line(self.transform.affine_inverse() * get_global_mouse_position(), self.transform.affine_inverse() * position, Color(1,0,0), 1)
-
 func set_front_to(x):
 	var deg = ((x + PI) * 180 / PI)
-	print("Angle is " +  str(deg))
 	if deg < 15 or deg > 345:
 		rotation_degrees = 0
 		set_form_a()
