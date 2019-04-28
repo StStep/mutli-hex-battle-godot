@@ -2,6 +2,7 @@ extends Node2D
 
 onready var footprint = get_node("Footprint")
 onready var unit = get_node("Unit")
+onready var pointer = get_node("Pointer")
 
 var footcordsA
 var footcordsB
@@ -10,6 +11,8 @@ var unith
 var unitw
 var unitcentA
 var unitcentB
+var pointerCoordsA
+var pointerCoordsB
 
 static func get_outline(hex_size, center = Vector2(0,0)):
 	return [Vector2(-hex_size.x/2 + center.x, center.y), Vector2(-hex_size.x/4 + center.x, -hex_size.y/2 + center.y),
@@ -47,6 +50,9 @@ func _init(ref = null).():
 	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
 	unitcentA = Vector2(0, unith/2)
 	unitcentB = (ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - ref.get_hex_center(centercell)).normalized() * ref.hex_size.y/2
+
+	pointerCoordsA = [(c_coord[0] + c_coord[1])/2, c_coord[1], c_coord[2] , (c_coord[2] + c_coord[3])/2]
+	pointerCoordsB = [c_coord[1], c_coord[2], c_coord[3]]
 
 func _ready():
 	set_form_a()
@@ -95,9 +101,11 @@ func set_form_a():
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentA
 	unit.rotation_degrees = 0
+	pointer.polygon = PoolVector2Array(pointerCoordsA)
 
 func set_form_b():
 	footprint.polygon = PoolVector2Array(footcordsB)
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentB
 	unit.rotation_degrees = 30
+	pointer.polygon = PoolVector2Array(pointerCoordsB)

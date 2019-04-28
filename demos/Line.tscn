@@ -10,3 +10,6 @@ script = ExtResource( 1 )
 [node name="Unit" type="Polygon2D" parent="."]
 color = Color( 0.737255, 0.137255, 0.137255, 1 )
 
+[node name="Pointer" type="Polygon2D" parent="."]
+color = Color( 0, 0, 0, 1 )
+
