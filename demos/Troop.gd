@@ -3,7 +3,6 @@ extends Node2D
 onready var footprint = get_node("Footprint")
 onready var unit = get_node("Unit")
 
-var center
 var footcordsA
 var footcordsB
 var unitcoords
@@ -20,7 +19,6 @@ func _init(ref = null).():
 		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 		ref.hex_scale = Vector2(100, 100)
 	var centercell = ref.get_hex_at(Vector2(0,0))
-	center = ref.get_hex_center(centercell)
 	var coord1 = get_outline(ref.hex_size)
 	var coord2 = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
 	var coord3 = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
@@ -51,14 +49,52 @@ func _ready():
 
 var form_a = true
 func _unhandled_input(event):
-	if event is InputEventMouseButton and event.get_button_index() == 1:
-		if event.is_pressed():
-			if form_a:
-				set_form_b()
-				form_a = false
-			else:
-				set_form_a()
-				form_a = true
+	if event is InputEventMouseMotion:
+		set_front_to(Vector2(0, 1).angle_to((get_global_mouse_position() - global_position)))
+		update()
+
+func _draw():
+	draw_line(self.transform.affine_inverse() * get_global_mouse_position(), self.transform.affine_inverse() * position, Color(1,0,0), 1)
+
+func set_front_to(x):
+	var deg = ((x + PI) * 180 / PI)
+	print("Angle is " +  str(deg))
+	if deg < 15 or deg > 345:
+		rotation_degrees = 0
+		set_form_a()
+	elif 15 <= deg and deg < 45:
+		rotation_degrees = 0
+		set_form_b()
+	elif 45 <= deg and deg < 75:
+		rotation_degrees = 60
+		set_form_a()
+	elif 75 <= deg and deg < 105:
+		rotation_degrees = 60
+		set_form_b()
+	elif 105 <= deg and deg < 135:
+		rotation_degrees = 120
+		set_form_a()
+	elif 135 <= deg and deg < 165:
+		rotation_degrees = 120
+		set_form_b()
+	elif 165 <= deg and deg < 195:
+		rotation_degrees = 180
+		set_form_a()
+	elif 195 <= deg and deg < 225:
+		rotation_degrees = 180
+		set_form_b()
+	elif 225 <= deg and deg < 255:
+		rotation_degrees = 240
+		set_form_a()
+	elif 255 <= deg and deg < 285:
+		rotation_degrees = 240
+		set_form_b()
+	elif 285 <= deg and deg < 315:
+		rotation_degrees = 300
+		set_form_a()
+	elif 315 <= deg and deg < 345:
+		rotation_degrees = 300
+		set_form_b()
 
 func set_form_a():
 	footprint.polygon = PoolVector2Array(footcordsA)
