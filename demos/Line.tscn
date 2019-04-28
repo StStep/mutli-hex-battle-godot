@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://demos/Line.gd" type="Script" id=1]
+
+[node name="Line" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Footprint" type="Polygon2D" parent="."]
+
+[node name="Unit" type="Polygon2D" parent="."]
+color = Color( 0.737255, 0.137255, 0.137255, 1 )
+

@@ -22,7 +22,6 @@ func _init(ref = null).():
 		ref.hex_scale = Vector2(100, 100)
 	var centercell = ref.get_hex_at(Vector2(0,0))
 	var c_coord = get_outline(ref.hex_size)
-	var s_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
 	var sw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
 	var se_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
 	var nw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
@@ -31,22 +30,21 @@ func _init(ref = null).():
 	for i in range(0, 3): footcordsA.append(sw_coord[i])
 	for i in range(1, 4): footcordsA.append(c_coord[i])
 	for i in range(2, 6): footcordsA.append(se_coord[i])
-	for i in range(4, 6): footcordsA.append(s_coord[i])
-	for i in range(4, 6): footcordsA.append(sw_coord[i])
+	for i in range(4, 5): footcordsA.append(c_coord[i])
+	for i in range(3, 6): footcordsA.append(sw_coord[i])
 
 	footcordsB = Array()
 	for i in range(0, 4): footcordsB.append(nw_coord[i])
 	for i in range(2, 4): footcordsB.append(c_coord[i])
 	for i in range(2, 6): footcordsB.append(se_coord[i])
-	for i in range(4, 6): footcordsB.append(s_coord[i])
-	for i in range(4, 6): footcordsB.append(sw_coord[i])
-	for i in range(0, 2): footcordsB.append(sw_coord[i])
+	for i in range(4, 6): footcordsB.append(c_coord[i])
+	for i in range(4, 6): footcordsB.append(nw_coord[i])
 
 	unitw = ref.hex_size.x * 2 * .85
-	unith = ref.hex_size.y
+	unith = ref.hex_size.y / 2
 	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
 	unitcentA = Vector2(0, unith/2)
-	unitcentB = Vector2(-unitw/13.5, unith/4)
+	unitcentB = Vector2(0,0)
 
 func _ready():
 	set_form_a()
