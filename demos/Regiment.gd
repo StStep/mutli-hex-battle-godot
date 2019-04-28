@@ -8,6 +8,8 @@ var footcordsB
 var unitcoords
 var unith
 var unitw
+var unitcentA
+var unitcentB
 
 static func get_outline(hex_size, center = Vector2(0,0)):
 	return [Vector2(-hex_size.x/2 + center.x, center.y), Vector2(-hex_size.x/4 + center.x, -hex_size.y/2 + center.y),
@@ -20,29 +22,38 @@ func _init(ref = null).():
 		ref.hex_scale = Vector2(100, 100)
 	var centercell = ref.get_hex_at(Vector2(0,0))
 	var c_coord = get_outline(ref.hex_size)
-	var s_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
+	var nw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
 	var sw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
 	var se_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
-	var nw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
+	var sse_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SE)))
+	var ssw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)))
+	var ss_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_S)))
+	var swsw_coord = get_outline(ref.hex_size, ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW).get_adjacent(centercell.DIR_SW)))
 
 	footcordsA = Array()
 	for i in range(0, 3): footcordsA.append(sw_coord[i])
 	for i in range(1, 4): footcordsA.append(c_coord[i])
-	for i in range(2, 6): footcordsA.append(se_coord[i])
-	for i in range(4, 6): footcordsA.append(s_coord[i])
-	for i in range(4, 6): footcordsA.append(sw_coord[i])
+	for i in range(2, 5): footcordsA.append(se_coord[i])
+	for i in range(3, 6): footcordsA.append(sse_coord[i])
+	for i in range(4, 6): footcordsA.append(ss_coord[i])
+	for i in range(4, 6): footcordsA.append(ssw_coord[i])
+	for i in range(0, 2): footcordsA.append(ssw_coord[i])
 
 	footcordsB = Array()
-	for i in range(0, 4): footcordsB.append(nw_coord[i])
-	for i in range(2, 4): footcordsB.append(c_coord[i])
-	for i in range(2, 6): footcordsB.append(se_coord[i])
-	for i in range(4, 6): footcordsB.append(s_coord[i])
-	for i in range(4, 6): footcordsB.append(sw_coord[i])
 	for i in range(0, 2): footcordsB.append(sw_coord[i])
+	for i in range(0, 3): footcordsB.append(nw_coord[i])
+	for i in range(1, 4): footcordsB.append(c_coord[i])
+	for i in range(2, 6): footcordsB.append(se_coord[i])
+	for i in range(2, 6): footcordsB.append(ss_coord[i])
+	for i in range(4, 6): footcordsB.append(ssw_coord[i])
+	for i in range(4, 6): footcordsB.append(swsw_coord[i])
+	for i in range(0, 2): footcordsB.append(swsw_coord[i])
 
 	unitw = ref.hex_size.x * 2 * .85
-	unith = ref.hex_size.y
+	unith = ref.hex_size.y * 2
 	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
+	unitcentA = Vector2(0, unith/2)
+	unitcentB = (ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - ref.get_hex_center(centercell))/2
 
 func _ready():
 	set_form_a()
@@ -89,11 +100,11 @@ func set_front_to(x):
 func set_form_a():
 	footprint.polygon = PoolVector2Array(footcordsA)
 	unit.polygon = PoolVector2Array(unitcoords)
-	unit.position = Vector2(0, unith/2)
+	unit.position = unitcentA
 	unit.rotation_degrees = 0
 
 func set_form_b():
 	footprint.polygon = PoolVector2Array(footcordsB)
 	unit.polygon = PoolVector2Array(unitcoords)
+	unit.position = unitcentB
 	unit.rotation_degrees = 30
-	unit.position = Vector2(-unitw/13.5, unith/4)
