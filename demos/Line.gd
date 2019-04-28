@@ -40,7 +40,7 @@ func _init(ref = null).():
 	for i in range(4, 6): footcordsB.append(c_coord[i])
 	for i in range(4, 6): footcordsB.append(nw_coord[i])
 
-	unitw = ref.hex_size.x * 2 * .85
+	unitw = ref.hex_size.y * 2
 	unith = ref.hex_size.y / 2
 	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
 	unitcentA = Vector2(0, unith/2)

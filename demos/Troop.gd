@@ -42,11 +42,11 @@ func _init(ref = null).():
 	for i in range(4, 6): footcordsB.append(sw_coord[i])
 	for i in range(0, 2): footcordsB.append(sw_coord[i])
 
-	unitw = ref.hex_size.x * 2 * .85
+	unitw = ref.hex_size.y * 2
 	unith = ref.hex_size.y
 	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
 	unitcentA = Vector2(0, unith/2)
-	unitcentB = Vector2(-unitw/13.5, unith/4)
+	unitcentB = (ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - ref.get_hex_center(centercell)).normalized() * ref.hex_size.y/2
 
 func _ready():
 	set_form_a()
