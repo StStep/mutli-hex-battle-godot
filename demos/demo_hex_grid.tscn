@@ -1,15 +1,14 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://demos/demo_2d.gd" type="Script" id=1]
+[ext_resource path="res://demos/demo_hex_grid.gd" type="Script" id=1]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/RTS-Camera2D.gd" type="Script" id=2]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/node_icon.png" type="Texture" id=3]
 [ext_resource path="res://tileset.tres" type="TileSet" id=4]
 
-
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 300 )
 
-[node name="2D Demo" type="Node"]
+[node name="Hex Grid Demo" type="Node"]
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2( 512, 300 )
