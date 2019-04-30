@@ -49,4 +49,24 @@ margin_right = -20.0
 margin_bottom = -20.0
 text = "Finish Deployment"
 
+[node name="BoundBottom" type="Line2D" parent="."]
+position = Vector2( -1.08072, -16.5649 )
+points = PoolVector2Array( 3345.64, 2975.29, 57.2336, 2976.62 )
+texture_mode = 1918989856
+
+[node name="BoundTop" type="Line2D" parent="."]
+position = Vector2( 8.23502, -2900.45 )
+points = PoolVector2Array( 3345.64, 2975.29, 57.2336, 2976.62 )
+texture_mode = 1918989856
+
+[node name="BoundLeft" type="Line2D" parent="."]
+position = Vector2( 8.23502, -2904.45 )
+points = PoolVector2Array( 47.9094, 5869.43, 57.2336, 2976.62 )
+texture_mode = 1918989856
+
+[node name="BoundRight" type="Line2D" parent="."]
+position = Vector2( 3293.65, -2911.27 )
+points = PoolVector2Array( 49.6279, 5873.47, 57.5142, 2982.06 )
+texture_mode = 1918989856
+
 [connection signal="pressed" from="CanvasLayer/Finish Deployment" to="." method="_on_Finish_Deployment_pressed"]
