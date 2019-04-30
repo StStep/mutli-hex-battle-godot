@@ -65,8 +65,7 @@ func _ready():
 	set_enable_follow_smoothing(true)
 	set_follow_smoothing(4)
 
-func _physics_process(delta):
-
+func _process(delta):
 	# Move camera by keys defined in InputMap (ui_left/top/right/bottom).
 	if key:
 		if __keys[0]:
@@ -97,6 +96,18 @@ func _physics_process(delta):
 
 	# Update position of the camera.
 	position += camera_movement * get_zoom()
+
+	# Limit position to avoid getting stuck in corner
+	var size = get_viewport().get_visible_rect ().size * get_zoom().x
+	if global_position.x + size.x/2 >= limit_right:
+		global_position.x = limit_right - size.x/2
+	if global_position.y + size.y/2 >= limit_bottom:
+		global_position.y = limit_bottom - size.y/2
+	if global_position.x - size.x/2 <= limit_left:
+		global_position.x = limit_left + size.x/2
+	if global_position.y - size.y/2 <= limit_top:
+		global_position.y = limit_top + size.y/2
+
 
 	# Set camera movement to zero, update old mouse position.
 	camera_movement = Vector2(0,0)
