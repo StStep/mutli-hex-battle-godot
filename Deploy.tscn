@@ -1,14 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Deploy.gd" type="Script" id=1]
 [ext_resource path="res://Battlefield.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/RTS-Camera2D.gd" type="Script" id=3]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/node_icon.png" type="Texture" id=4]
 [ext_resource path="res://GameState.tscn" type="PackedScene" id=5]
-[ext_resource path="res://units/Line.tscn" type="PackedScene" id=6]
-[ext_resource path="res://units/Troop.tscn" type="PackedScene" id=7]
-[ext_resource path="res://units/Regiment.tscn" type="PackedScene" id=8]
-[ext_resource path="res://resources/Gugi-Regular-Medium.tres" type="DynamicFont" id=9]
+[ext_resource path="res://resources/Gugi-Regular-Medium.tres" type="DynamicFont" id=6]
 
 [node name="Deploy" type="Node"]
 script = ExtResource( 1 )
@@ -51,6 +48,8 @@ margin_left = -200.0
 margin_top = -40.0
 margin_right = -20.0
 margin_bottom = -20.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Finish Deployment"
 
 [node name="UnitPalette" type="ColorRect" parent="CanvasLayer"]
@@ -62,41 +61,56 @@ margin_bottom = 563.95
 size_flags_horizontal = 4
 color = Color( 0.12549, 0.443137, 0.698039, 0.32549 )
 
-[node name="Line" parent="CanvasLayer/UnitPalette" instance=ExtResource( 6 )]
-position = Vector2( 80.75, 19 )
-scale = Vector2( 0.3, 0.3 )
-
-[node name="Troop" parent="CanvasLayer/UnitPalette" instance=ExtResource( 7 )]
-position = Vector2( 272.25, 19 )
-scale = Vector2( 0.3, 0.3 )
-
-[node name="Regiment" parent="CanvasLayer/UnitPalette" instance=ExtResource( 8 )]
-position = Vector2( 475.95, 19 )
-scale = Vector2( 0.3, 0.3 )
-
 [node name="LineCount" type="Label" parent="CanvasLayer/UnitPalette"]
 margin_left = 4.44998
 margin_top = 6.04999
 margin_right = 34.45
 margin_bottom = 57.05
-custom_fonts/font = ExtResource( 9 )
+custom_fonts/font = ExtResource( 6 )
 text = "5"
 
 [node name="TroopCount" type="Label" parent="CanvasLayer/UnitPalette"]
 margin_left = 193.5
-margin_top = 4.19998
+margin_top = 6.19998
 margin_right = 223.5
-margin_bottom = 55.2
-custom_fonts/font = ExtResource( 9 )
+margin_bottom = 57.2
+custom_fonts/font = ExtResource( 6 )
 text = "5"
 
 [node name="RegimentCount" type="Label" parent="CanvasLayer/UnitPalette"]
-margin_left = 398.4
+margin_left = 376.4
 margin_top = 5.89999
-margin_right = 428.4
+margin_right = 406.4
 margin_bottom = 56.9
-custom_fonts/font = ExtResource( 9 )
+custom_fonts/font = ExtResource( 6 )
 text = "5"
+
+[node name="BtMakeLine" type="Button" parent="CanvasLayer/UnitPalette"]
+margin_left = 53.3974
+margin_top = 20.0714
+margin_right = 130.397
+margin_bottom = 40.0714
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Make Line"
+
+[node name="BtMakeTroop" type="Button" parent="CanvasLayer/UnitPalette"]
+margin_left = 230.936
+margin_top = 21.24
+margin_right = 316.936
+margin_bottom = 41.24
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Make Troop"
+
+[node name="BtMakeRegiment" type="Button" parent="CanvasLayer/UnitPalette"]
+margin_left = 414.904
+margin_top = 21.8565
+margin_right = 525.904
+margin_bottom = 41.8565
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Make Regiment"
 
 [node name="BoundBottom" type="Line2D" parent="."]
 position = Vector2( -1.08072, -16.5649 )
@@ -119,3 +133,6 @@ points = PoolVector2Array( 49.6279, 5873.47, 57.5142, 2982.06 )
 texture_mode = 1918989856
 
 [connection signal="pressed" from="CanvasLayer/Finish Deployment" to="." method="_on_Finish_Deployment_pressed"]
+[connection signal="pressed" from="CanvasLayer/UnitPalette/BtMakeLine" to="." method="_on_BtMakeLine_pressed"]
+[connection signal="pressed" from="CanvasLayer/UnitPalette/BtMakeTroop" to="." method="_on_BtMakeTroop_pressed"]
+[connection signal="pressed" from="CanvasLayer/UnitPalette/BtMakeRegiment" to="." method="_on_BtMakeRegiment_pressed"]

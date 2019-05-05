@@ -6,7 +6,12 @@ onready var line = get_node("Line")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	troop.set_as_troop()
+	troop.can_drag = false
+	regiment.set_as_regiment()
+	regiment.can_drag = false
+	line.set_as_line()
+	line.can_drag = false
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
