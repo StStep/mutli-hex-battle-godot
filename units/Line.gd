@@ -3,6 +3,10 @@ extends Node2D
 onready var footprint = get_node("Footprint")
 onready var unit = get_node("Unit")
 onready var pointer = get_node("Pointer")
+onready var collisionArea = get_node("CollisionArea")
+
+const NORMAL_COLOR = Color(1, 1, 1)
+const HL_COLOR = Color( .82, .82, .36)
 
 var footcordsA
 var footcordsB
@@ -52,8 +56,13 @@ func _init(ref = null).():
 	pointerCoordsA = [(c_coord[0] + c_coord[1])/2, c_coord[1], c_coord[2] , (c_coord[2] + c_coord[3])/2]
 	pointerCoordsB = [c_coord[1], c_coord[2], c_coord[3]]
 
+	grid_ref = ref
+
 func _ready():
 	set_form_a()
+
+func set_pos_to(glob_position):
+	set_global_position(grid_ref.get_hex_center(grid_ref.get_hex_at(glob_position)))
 
 func set_front_to(x):
 	var deg = ((x + PI) * 180 / PI)
@@ -96,6 +105,7 @@ func set_front_to(x):
 
 func set_form_a():
 	footprint.polygon = PoolVector2Array(footcordsA)
+	collisionArea.polygon = PoolVector2Array(footcordsA)
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentA
 	unit.rotation_degrees = 0
@@ -103,7 +113,55 @@ func set_form_a():
 
 func set_form_b():
 	footprint.polygon = PoolVector2Array(footcordsB)
+	collisionArea.polygon = PoolVector2Array(footcordsB)
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentB
 	unit.rotation_degrees = 30
 	pointer.polygon = PoolVector2Array(pointerCoordsB)
+
+var grid_ref
+var can_drag = true
+var mouse_in = false
+var dragging = false
+var pointing = false
+
+func _on_Line_mouse_entered():
+	print("boooooo")
+	mouse_in = true
+
+func _on_Line_mouse_exited():
+	print("oooooob")
+	mouse_in = false
+
+func _unhandled_input(event):
+	if not can_drag:
+		return;
+
+	if event is InputEventMouseMotion:
+		if pointing:
+			if not mouse_in:
+				set_front_to(Vector2(0, 1).angle_to((get_global_mouse_position() - global_position)))
+		elif dragging:
+			set_pos_to(get_global_mouse_position())
+		else:
+			pass
+	elif event is InputEventMouseButton && event.button_index == BUTTON_LEFT:
+		# Start pointing
+		if not pointing and mouse_in and event.pressed:
+			pointing = true
+			footprint.color = HL_COLOR
+			print("Start pointing")
+		# Start dragging
+		elif not dragging and mouse_in and not event.pressed:
+			dragging = true
+			pointing = false
+			footprint.color = HL_COLOR
+			print("Start dragging")
+		# Stop everything
+		elif (dragging or pointing) and not event.pressed:
+			pointing = false
+			dragging = false
+			footprint.color = NORMAL_COLOR
+			print("Stopping")
+	else:
+		pass
