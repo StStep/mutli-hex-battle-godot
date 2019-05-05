@@ -1,5 +1,8 @@
 extends Node2D
 
+signal drag_started(unit)
+signal drag_ended(unit)
+
 onready var footprint = get_node("Footprint")
 onready var unit = get_node("Unit")
 onready var pointer = get_node("Pointer")
@@ -225,11 +228,13 @@ func _unhandled_input(event):
 	elif event is InputEventMouseButton && event.button_index == BUTTON_LEFT:
 		# Start pointing
 		if not pointing and mouse_in and event.pressed:
+			if not pointing and not dragging: emit_signal("drag_started", self)
 			pointing = true
 			footprint.color = HL_COLOR
 			print("Start pointing")
 		# Start dragging
 		elif not dragging and mouse_in and not event.pressed:
+			if not pointing and not dragging: emit_signal("drag_started", self)
 			dragging = true
 			pointing = false
 			footprint.color = HL_COLOR
@@ -240,5 +245,6 @@ func _unhandled_input(event):
 			dragging = false
 			footprint.color = NORMAL_COLOR
 			print("Stopping")
+			emit_signal("drag_ended", self)
 	else:
 		pass

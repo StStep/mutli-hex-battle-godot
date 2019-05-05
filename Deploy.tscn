@@ -30,6 +30,7 @@ camera_speed = 800
 camera_margin = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+editor/display_folded = true
 
 [node name="GameState" parent="CanvasLayer" instance=ExtResource( 5 )]
 anchor_left = 0.5
@@ -131,6 +132,8 @@ texture_mode = 1918989856
 position = Vector2( 3293.65, -2911.27 )
 points = PoolVector2Array( 49.6279, 5873.47, 57.5142, 2982.06 )
 texture_mode = 1918989856
+
+[node name="Units" type="Node" parent="."]
 
 [connection signal="pressed" from="CanvasLayer/Finish Deployment" to="." method="_on_Finish_Deployment_pressed"]
 [connection signal="pressed" from="CanvasLayer/UnitPalette/BtMakeLine" to="." method="_on_BtMakeLine_pressed"]
