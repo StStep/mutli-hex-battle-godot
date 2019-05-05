@@ -31,7 +31,6 @@ camera_speed = 800
 camera_margin = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-editor/display_folded = true
 
 [node name="GameState" parent="CanvasLayer" instance=ExtResource( 5 )]
 anchor_left = 0.5
