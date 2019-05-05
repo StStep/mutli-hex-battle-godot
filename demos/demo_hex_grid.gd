@@ -9,7 +9,7 @@ onready var hex_coords = get_node("Highlight/HexCoords")
 
 
 func _ready():
-	HexGrid.hex_scale = Vector2(107.5, 107.5)
+	HexGrid.hex_scale = Vector2(108.55, 108.55)
 
 func _unhandled_input(event):
 	if 'position' in event:

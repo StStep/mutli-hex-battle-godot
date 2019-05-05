@@ -27,13 +27,12 @@ static func get_hex_outline(hex_size, center = Vector2(0,0)):
 			Vector2(hex_size.x/4 + center.x, -hex_size.y/2 + center.y), Vector2(hex_size.x/2 + center.x, center.y),
 			Vector2(hex_size.x/4 + center.x, hex_size.y/2 + center.y), Vector2(-hex_size.x/4 + center.x, hex_size.y/2 + center.y)]
 
-func _init(ref = null).():
+func set_as_line(ref = null):
 	if ref == null:
 		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 		ref.hex_scale = Vector2(100, 100)
 	grid_ref = ref
 
-func set_as_line():
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = get_hex_outline(grid_ref.hex_size)
 	var sw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
@@ -64,7 +63,12 @@ func set_as_line():
 	pointerCoordsB = [c_coord[1], c_coord[2], c_coord[3]]
 	setup = true
 
-func set_as_troop():
+func set_as_troop(ref = null):
+	if ref == null:
+		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+		ref.hex_scale = Vector2(100, 100)
+	grid_ref = ref
+
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = get_hex_outline(grid_ref.hex_size)
 	var s_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
@@ -97,7 +101,12 @@ func set_as_troop():
 	pointerCoordsB = [c_coord[1], c_coord[2], c_coord[3]]
 	setup = true
 
-func set_as_regiment():
+func set_as_regiment(ref = null):
+	if ref == null:
+		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+		ref.hex_scale = Vector2(100, 100)
+	grid_ref = ref
+
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = get_hex_outline(grid_ref.hex_size)
 	var nw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
