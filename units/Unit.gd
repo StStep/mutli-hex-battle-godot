@@ -8,8 +8,8 @@ onready var unit = get_node("Unit")
 onready var pointer = get_node("Pointer")
 onready var collisionArea = get_node("CollisionArea")
 
-const NORMAL_COLOR = Color(1, 1, 1)
-const HL_COLOR = Color( .82, .82, .36)
+const NORMAL_COLOR = Color(1, 1, 1, .5)
+const HL_COLOR = Color( .82, .82, .36, .5)
 
 var setup = false
 var footcordsA

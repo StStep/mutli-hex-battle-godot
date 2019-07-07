@@ -6,6 +6,7 @@
 script = ExtResource( 1 )
 
 [node name="Footprint" type="Polygon2D" parent="."]
+color = Color( 1, 1, 1, 0.5 )
 
 [node name="Unit" type="Polygon2D" parent="."]
 color = Color( 0.737255, 0.137255, 0.137255, 1 )
