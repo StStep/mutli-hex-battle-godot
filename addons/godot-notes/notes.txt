@@ -1,0 +1,8 @@
+1 Setup per hex addr info
+	+ Encap. hexgrid within battlefield.gd/.tscn
+	+ Contain concept of what exists at hex addr
+	+ Be able to detect overlapping units
+	+ Contain terrain information
+	+ Detect valid movements
+	+ Serialize battlefield layouts
+		+ Either pull info tiles or set tiles with info
