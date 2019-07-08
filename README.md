@@ -15,6 +15,10 @@ This is like a tabletop war-game, where unit deployment happens before the first
 
 * `Start.tscn` - Placeholder title
 * `Deploy.tscn` - Current experimentation zone, combined together everything and can drag-and-drop out units.
+
+    * Click on a 'make' button to spawn a unit, place unit by clicking, click and hold to set orientation
+    * Start moving a unit by clicking on it when nothing is currently selected
+
 * `TurnX.tscn` - Placeholder for game turns
 
 ## Demo Scenes
