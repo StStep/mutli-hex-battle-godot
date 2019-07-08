@@ -3,7 +3,7 @@
 [ext_resource path="res://demos/demo_hex_grid.gd" type="Script" id=1]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/RTS-Camera2D.gd" type="Script" id=2]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/node_icon.png" type="Texture" id=3]
-[ext_resource path="res://tiles/tileset.tres" type="TileSet" id=4]
+[ext_resource path="res://tiles/full-tiles.tres" type="TileSet" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 300 )
