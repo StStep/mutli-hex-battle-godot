@@ -1,11 +1,12 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Deploy.gd" type="Script" id=1]
-[ext_resource path="res://Battlefield.tscn" type="PackedScene" id=2]
+[ext_resource path="res://battlefield/Battlefield.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/RTS-Camera2D.gd" type="Script" id=3]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/node_icon.png" type="Texture" id=4]
 [ext_resource path="res://GameState.tscn" type="PackedScene" id=5]
 [ext_resource path="res://resources/Gugi-Regular-Medium.tres" type="DynamicFont" id=6]
+
 
 [node name="Deploy" type="Node"]
 script = ExtResource( 1 )
