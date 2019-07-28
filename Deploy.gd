@@ -4,8 +4,7 @@ onready var nd_unit = preload("res://units//Unit.tscn")
 onready var nd_linecount  = get_node("CanvasLayer/UnitPalette/LineCount")
 onready var nd_troopcount  = get_node("CanvasLayer/UnitPalette/TroopCount")
 onready var nd_regcount  = get_node("CanvasLayer/UnitPalette/RegimentCount")
-
-var hexGrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+onready var hexGrid = get_node("Battlefield").hexgrid
 
 var busy = false
 var linecnt = 6
@@ -13,7 +12,6 @@ var troopcnt = 4
 var regcnt = 2
 
 func _ready():
-	hexGrid.hex_scale = Vector2(108.55, 108.55)
 	nd_linecount.text = str(linecnt)
 	nd_troopcount.text = str(troopcnt)
 	nd_regcount.text = str(regcnt)

@@ -41,6 +41,7 @@ This is like a tabletop war-game, where unit deployment happens before the first
 
 * Having trouble with aligning current demo tile-set with hexgrids
 
-    * After some distance from center, an offset error with hex edges is noticable
-    * Could be an issue with the tileset
+    * After large distances from origin, an offset error with hex edges is noticable
+    * Using more floating point decimals for tileoffset helps
+    * Will need to maybe have some form of local correction if large distances are being used.
  
