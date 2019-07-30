@@ -10,7 +10,7 @@ script = ExtResource( 1 )
 [node name="GrassLayer" type="TileMap" parent="."]
 mode = 2
 tile_set = ExtResource( 2 )
-cell_custom_transform = Transform2D( 82.5, 0, 0, 95.26, -95.26, -95.26 )
+cell_custom_transform = Transform2D( 82.5, 0, 0, 95.263, -95.263, -95.263 )
 cell_half_offset = 1
 cell_tile_origin = 1
 format = 1
