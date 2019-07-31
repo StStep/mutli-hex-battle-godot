@@ -1,5 +1,7 @@
 extends Node2D
 
+var util = preload("res://Utility.gd")
+
 signal drag_started(unit)
 signal drag_ended(unit)
 
@@ -22,11 +24,6 @@ var unitcentB
 var pointerCoordsA
 var pointerCoordsB
 
-static func get_hex_outline(hex_size, center = Vector2(0,0)):
-	return [Vector2(-hex_size.x/2 + center.x, center.y), Vector2(-hex_size.x/4 + center.x, -hex_size.y/2 + center.y),
-			Vector2(hex_size.x/4 + center.x, -hex_size.y/2 + center.y), Vector2(hex_size.x/2 + center.x, center.y),
-			Vector2(hex_size.x/4 + center.x, hex_size.y/2 + center.y), Vector2(-hex_size.x/4 + center.x, hex_size.y/2 + center.y)]
-
 func set_as_line(ref = null):
 	if ref == null:
 		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
@@ -34,10 +31,10 @@ func set_as_line(ref = null):
 	grid_ref = ref
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
-	var c_coord = get_hex_outline(grid_ref.hex_size)
-	var sw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
-	var se_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
-	var nw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
+	var c_coord = util.get_hex_outline(grid_ref.hex_size)
+	var sw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
+	var se_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
+	var nw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
 
 	footcordsA = Array()
 	for i in range(0, 3): footcordsA.append(sw_coord[i])
@@ -70,11 +67,11 @@ func set_as_troop(ref = null):
 	grid_ref = ref
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
-	var c_coord = get_hex_outline(grid_ref.hex_size)
-	var s_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
-	var sw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
-	var se_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
-	var nw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
+	var c_coord = util.get_hex_outline(grid_ref.hex_size)
+	var s_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S)))
+	var sw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
+	var se_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
+	var nw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
 
 	footcordsA = Array()
 	for i in range(0, 3): footcordsA.append(sw_coord[i])
@@ -108,14 +105,14 @@ func set_as_regiment(ref = null):
 	grid_ref = ref
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
-	var c_coord = get_hex_outline(grid_ref.hex_size)
-	var nw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
-	var sw_coord  = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
-	var se_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
-	var sse_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SE)))
-	var ssw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)))
-	var ss_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_S)))
-	var swsw_coord = get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW).get_adjacent(centercell.DIR_SW)))
+	var c_coord = util.get_hex_outline(grid_ref.hex_size)
+	var nw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_NW)))
+	var sw_coord  = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW)))
+	var se_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SE)))
+	var sse_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SE)))
+	var ssw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)))
+	var ss_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_S)))
+	var swsw_coord = util.get_hex_outline(grid_ref.hex_size, grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_SW).get_adjacent(centercell.DIR_SW)))
 
 	footcordsA = Array()
 	for i in range(0, 3): footcordsA.append(sw_coord[i])
@@ -215,11 +212,9 @@ var dragging = false
 var pointing = false
 
 func _on_Unit_mouse_entered():
-	print("boooooo")
 	mouse_in = true
 
 func _on_Unit_mouse_exited():
-	print("oooooob")
 	mouse_in = false
 
 func _unhandled_input(event):
