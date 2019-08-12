@@ -63,6 +63,7 @@ func set_as_line(ref = null):
 	setup = true
 
 func set_as_troop(ref = null):
+	battlefield = ref
 	if ref == null:
 		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 		grid_ref.hex_scale = Vector2(100, 100)
@@ -102,6 +103,7 @@ func set_as_troop(ref = null):
 	setup = true
 
 func set_as_regiment(ref = null):
+	battlefield = ref
 	if ref == null:
 		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 		grid_ref.hex_scale = Vector2(100, 100)
