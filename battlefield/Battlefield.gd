@@ -1,12 +1,13 @@
 extends Node
 
-
+# Tilesets use odd-q orientation with 0,0 top-left and +,+ toward bottom-right
 onready var nd_grasslayer  = get_node("GrassLayer")
 onready var nd_forestlayer  = get_node("ForestLayer")
 
 var util = preload("res://Utility.gd")
+# offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
-var infogrid = []
+var infogrid = [] # Follows tileset orientation
 
 export var hex_scale = Vector2(110, 110)
 
@@ -34,3 +35,10 @@ func _draw_hex_at(pos:Vector2):
 		poly.polygon = PoolVector2Array(util.get_hex_outline(hexgrid.hex_size, pos))
 		poly.color = Color(1,0,0,.25)
 		$Debug.add_child(poly)
+
+func is_free(hexes:Array):
+	for hex in hexes:
+		var pos = util.cube_to_oddq(hex.cube_coords)
+		if infogrid[pos.x][pos.y] == 1:
+			return false
+	return true

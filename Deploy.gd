@@ -4,7 +4,7 @@ onready var nd_unit = preload("res://units//Unit.tscn")
 onready var nd_linecount  = get_node("CanvasLayer/UnitPalette/LineCount")
 onready var nd_troopcount  = get_node("CanvasLayer/UnitPalette/TroopCount")
 onready var nd_regcount  = get_node("CanvasLayer/UnitPalette/RegimentCount")
-onready var hexGrid = get_node("Battlefield").hexgrid
+onready var nd_battlefield = get_node("Battlefield")
 
 var busy = false
 var linecnt = 6
@@ -23,7 +23,7 @@ func _on_BtMakeLine_pressed():
 	if busy: return
 	if linecnt <= 0: return
 	var line = nd_unit.instance()
-	line.set_as_line(hexGrid)
+	line.set_as_line(nd_battlefield)
 	line.dragging = true
 	$Units.add_child(line)
 	line.connect("drag_started", self, "_start_dragging")
@@ -36,7 +36,7 @@ func _on_BtMakeTroop_pressed():
 	if busy: return
 	if troopcnt <= 0: return
 	var troop = nd_unit.instance()
-	troop.set_as_troop(hexGrid)
+	troop.set_as_troop(nd_battlefield)
 	troop.dragging = true
 	$Units.add_child(troop)
 	troop.connect("drag_started", self, "_start_dragging")
@@ -49,7 +49,7 @@ func _on_BtMakeRegiment_pressed():
 	if busy: return
 	if regcnt <= 0: return
 	var regiment = nd_unit.instance()
-	regiment.set_as_regiment(hexGrid)
+	regiment.set_as_regiment(nd_battlefield)
 	regiment.dragging = true
 	$Units.add_child(regiment)
 	regiment.connect("drag_started", self, "_start_dragging")

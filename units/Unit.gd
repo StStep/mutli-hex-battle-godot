@@ -25,10 +25,12 @@ var pointerCoordsA
 var pointerCoordsB
 
 func set_as_line(ref = null):
+	battlefield = ref
 	if ref == null:
-		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
-		ref.hex_scale = Vector2(100, 100)
-	grid_ref = ref
+		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+		grid_ref.hex_scale = Vector2(100, 100)
+	else:
+		grid_ref = ref.hexgrid
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = util.get_hex_outline(grid_ref.hex_size)
@@ -62,9 +64,10 @@ func set_as_line(ref = null):
 
 func set_as_troop(ref = null):
 	if ref == null:
-		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
-		ref.hex_scale = Vector2(100, 100)
-	grid_ref = ref
+		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+		grid_ref.hex_scale = Vector2(100, 100)
+	else:
+		grid_ref = ref.hexgrid
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = util.get_hex_outline(grid_ref.hex_size)
@@ -100,9 +103,10 @@ func set_as_troop(ref = null):
 
 func set_as_regiment(ref = null):
 	if ref == null:
-		ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
-		ref.hex_scale = Vector2(100, 100)
-	grid_ref = ref
+		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
+		grid_ref.hex_scale = Vector2(100, 100)
+	else:
+		grid_ref = ref.hexgrid
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
 	var c_coord = util.get_hex_outline(grid_ref.hex_size)
@@ -148,7 +152,11 @@ func _ready():
 		set_form_a()
 
 func set_pos_to(glob_position):
-	set_global_position(grid_ref.get_hex_center(grid_ref.get_hex_at(glob_position)))
+	var hex = grid_ref.get_hex_at(glob_position)
+	if battlefield == null or battlefield.is_free([hex]):
+		set_global_position(grid_ref.get_hex_center(hex))
+	else:
+		print("blocked")
 
 func set_front_to(x):
 	var deg = ((x + PI) * 180 / PI)
@@ -210,6 +218,7 @@ var can_drag = true
 var mouse_in = false
 var dragging = false
 var pointing = false
+var battlefield
 
 func _on_Unit_mouse_entered():
 	mouse_in = true

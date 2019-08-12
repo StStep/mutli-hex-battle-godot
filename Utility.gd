@@ -1,13 +1,13 @@
 # Hex Utilities
 
-static func cube_to_oddq(cube:Vector3):
-    var col = cube.x
-    var row = cube.z + (cube.x - (cube.x as int & 1)) / 2
+static func cube_to_oddq(cube_coor:Vector3):
+    var col = cube_coor.x
+    var row = cube_coor.z + (cube_coor.x - (cube_coor.x as int & 1)) / 2
     return Vector2(col, row)
 
-static func oddq_to_cube(hex:Vector2):
-    var x = hex.x
-    var z = hex.y - (hex.x - (hex.x as int & 1)) / 2
+static func oddq_to_cube(oddq_coor:Vector2):
+    var x = oddq_coor.x
+    var z = oddq_coor.y - (oddq_coor.x - (oddq_coor.x as int & 1)) / 2
     var y = -x-z
     return Vector3(x, y, z)
 
