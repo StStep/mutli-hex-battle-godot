@@ -28,7 +28,7 @@ This is like a tabletop war-game, where unit deployment happens before the first
     * Use WASD and scroll-wheel to move camera
     * Testing hex and tileset alignment
 
-* `demo_units.tsc`n - Instantiate three `unit.tscn`, one of each size and have them roate to follow mouse
+* `demos/demo_units.tscn` - Instantiate three `Unit.tscn`, one of each size and have them roate to follow mouse
 
     * Display all possible rotations of multi-hex based units
     * The red rectangles are the representation of the blocks of units
@@ -36,6 +36,8 @@ This is like a tabletop war-game, where unit deployment happens before the first
     * The white hexes are the unit footprints in hexes
     * All units are same width
     * Lines are half the depth of troops which are half the depth of regiments
+
+* `demos/utility_test.tscn` - Test out functions from `Utility.gd`
 
 ## Known Issues
 

@@ -5,3 +5,13 @@
 [node name="UtilityTest" type="Node2D"]
 script = ExtResource( 1 )
 
+[node name="Poly" type="Polygon2D" parent="."]
+
+[node name="Poly2" type="Polygon2D" parent="."]
+
+[node name="Poly3" type="Polygon2D" parent="."]
+
+[node name="Poly4" type="Polygon2D" parent="."]
+
+[node name="Poly5" type="Polygon2D" parent="."]
+
