@@ -8,6 +8,8 @@ var util = preload("res://Utility.gd")
 # offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 var infogrid = [] # Follows tileset orientation
+var width
+var height
 
 export var hex_scale = Vector2(110, 110)
 
@@ -15,7 +17,9 @@ func _ready():
 	hexgrid.hex_scale = hex_scale
 	var szrect = nd_grasslayer.get_used_rect ()
 	var offset = szrect.position
-	infogrid = _create_2d_array(szrect.size.x, szrect.size.y, 0)
+	width = szrect.size.x
+	height = szrect.size.y
+	infogrid = _create_2d_array(width, height, 0)
 	print("Making an array with offset %s and size %s" % [offset, szrect.size])
 	for c in nd_forestlayer.get_used_cells():
 		infogrid[c.x][c.y] = 1
@@ -39,6 +43,6 @@ func _draw_hex_at(pos:Vector2):
 func is_free(hexes:Array):
 	for hex in hexes:
 		var pos = util.cube_to_oddq(hex.cube_coords)
-		if infogrid[pos.x][pos.y] == 1:
+		if pos.x < 0 or pos.x >= width or pos.y < 0 or pos.y >= height or infogrid[pos.x][pos.y] == 1:
 			return false
 	return true
