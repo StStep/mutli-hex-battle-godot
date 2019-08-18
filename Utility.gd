@@ -37,6 +37,7 @@ static func get_hex_outline(hex_size:Vector2, center := Vector2(0,0)):
 static func get_multi_hex_outline(hex_size:Vector2, center:Vector2, axial_coords:Array):
 	# Get neighbors for each hex, axial coordinate
 	var hexes = get_neighbors(axial_coords)
+	var side_len = hex_size.y/2.0 + hex_size.y*0.1 # For final ploygon side length check with 10% slack
 
 	# Pick top left hex to start, most negative, with priority on r/y
 	var start_hex = null
@@ -68,7 +69,7 @@ static func get_multi_hex_outline(hex_size:Vector2, center:Vector2, axial_coords
 			point_dir = next_cw_axial_coor(point_dir)
 
 		# Use next_hex_dir to move to the next hex, breaking out if reaching start
-		if start_hex == cur_hex + next_hex_dir:
+		if start_hex == cur_hex + next_hex_dir && points[0].distance_to(points[points.size() - 1]) < side_len:
 			cur_hex = null
 		else:
 			cur_hex = cur_hex + next_hex_dir

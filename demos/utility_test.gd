@@ -22,8 +22,11 @@ func _ready():
 	var points3 = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(300,300), [Vector2(0,0), Vector2(1,-1), Vector2(1,0), Vector2(2,-1), Vector2(2,-2)])
 	$Poly3.polygon = PoolVector2Array(points3)
 
-	var points4 = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(700,300), [Vector2(0,0), Vector2(0,-1), Vector2(0,-2)])
+	var points4 = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(700,500), [Vector2(0,0), Vector2(0,-1), Vector2(0,-2)])
 	$Poly4.polygon = PoolVector2Array(points4)
 
 	var points5 = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(500,500), [Vector2(0,0), Vector2(-1,0), Vector2(1,-1), Vector2(0,1)])
 	$Poly5.polygon = PoolVector2Array(points5)
+
+	var points6 = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(500,80), [Vector2(-1,1), Vector2(0,0), Vector2(1,0), Vector2(2,-1), Vector2(3,-1)])
+	$Poly6.polygon = PoolVector2Array(points6)
