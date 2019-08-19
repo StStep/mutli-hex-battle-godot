@@ -192,6 +192,8 @@ func _unhandled_input(event):
 			pointing = true
 			footprint.color = HL_COLOR
 			print("Start pointing")
+			if legalloc:
+				battlefield.remove_unit(get_hexes())
 		# Start dragging
 		elif not dragging and mouse_in and not event.pressed:
 			if not pointing and not dragging: emit_signal("drag_started", self)
@@ -199,6 +201,8 @@ func _unhandled_input(event):
 			pointing = false
 			footprint.color = HL_COLOR
 			print("Start dragging")
+			if legalloc:
+				battlefield.remove_unit(get_hexes())
 		# Stop everything
 		elif (dragging or pointing) and not event.pressed:
 			pointing = false
@@ -206,5 +210,7 @@ func _unhandled_input(event):
 			footprint.color = NORMAL_COLOR if legalloc else ERR_COLOR
 			print("Stopping")
 			emit_signal("drag_ended", self)
+			if legalloc:
+				battlefield.place_unit(get_hexes())
 	else:
 		pass

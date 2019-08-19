@@ -8,6 +8,7 @@ var util = preload("res://Utility.gd")
 # offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 var infogrid = [] # Follows tileset orientation
+var unitgrid = [] # Follows tileset orientation
 var width
 var height
 
@@ -20,6 +21,7 @@ func _ready():
 	width = szrect.size.x
 	height = szrect.size.y
 	infogrid = _create_2d_array(width, height, 0)
+	unitgrid = _create_2d_array(width, height, 0)
 	print("Making an array with offset %s and size %s" % [offset, szrect.size])
 	for c in nd_forestlayer.get_used_cells():
 		infogrid[c.x][c.y] = 1
@@ -43,6 +45,19 @@ func _draw_hex_at(pos:Vector2):
 func is_free(hexes:Array):
 	for hex in hexes:
 		var pos = util.cube_to_oddq(hex.cube_coords)
-		if pos.x < 0 or pos.x >= width or pos.y < 0 or pos.y >= height or infogrid[pos.x][pos.y] == 1:
+		if pos.x < 0 or pos.x >= width or pos.y < 0 or pos.y >= height \
+			or infogrid[pos.x][pos.y] != 0 or unitgrid[pos.x][pos.y] != 0:
 			return false
 	return true
+
+func place_unit(hexes:Array):
+	for hex in hexes:
+		var pos = util.cube_to_oddq(hex.cube_coords)
+		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
+			unitgrid[pos.x][pos.y] = 1;
+
+func remove_unit(hexes:Array):
+	for hex in hexes:
+		var pos = util.cube_to_oddq(hex.cube_coords)
+		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
+			unitgrid[pos.x][pos.y] = 0;
