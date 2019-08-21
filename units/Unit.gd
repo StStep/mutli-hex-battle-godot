@@ -1,18 +1,18 @@
 extends Node2D
+class_name Unit
 
 var util = preload("res://Utility.gd")
-
-signal drag_started(unit)
-signal drag_ended(unit)
 
 onready var footprint = get_node("Footprint")
 onready var unit = get_node("Unit")
 onready var pointer = get_node("Pointer")
-onready var collisionArea = get_node("CollisionArea")
 
 const NORMAL_COLOR = Color(1, 1, 1, .5)
 const HL_COLOR = Color( .82, .82, .36, .5)
 const ERR_COLOR = Color( .82, 0, 0, .5)
+
+var battlefield
+var grid_ref
 
 var setup = false
 var isFormA = true
@@ -29,7 +29,15 @@ var unitcentB
 var pointerCoordsA
 var pointerCoordsB
 
-func set_as(wratio, hratio, ref = null):
+func _ready() -> void:
+	if setup:
+		set_form_a()
+	($Dragable as Dragable).connect("drag_started", self, "pickup")
+	($Dragable as Dragable).connect("drag_ended", self, "place")
+	($Dragable as Dragable).connect("point_to", self, "set_front_to")
+	($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
+
+func set_as(wratio: float, hratio: float, ref = null) -> void:
 	battlefield = ref
 	if ref == null:
 		grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
@@ -48,7 +56,7 @@ func set_as(wratio, hratio, ref = null):
 	footcordsA = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), hexesA)
 	footcordsB = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), hexesB)
 
-func set_as_line(ref = null):
+func set_as_line(ref = null) -> void:
 	hexesA = [Vector2(-1,1), Vector2(0,0), Vector2(1,0)]
 	hexesB = [Vector2(-1,0), Vector2(0,0), Vector2(1,0)]
 	set_as(2, 0.5, ref)
@@ -56,7 +64,7 @@ func set_as_line(ref = null):
 	unitcentB = Vector2(0,0)
 	setup = true
 
-func set_as_troop(ref = null):
+func set_as_troop(ref = null) -> void:
 	hexesA = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1)]
 	hexesB = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0)]
 	set_as(2, 1, ref)
@@ -65,7 +73,7 @@ func set_as_troop(ref = null):
 	unitcentB = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell)).normalized() * grid_ref.hex_size.y/2
 	setup = true
 
-func set_as_regiment(ref = null):
+func set_as_regiment(ref = null) -> void:
 	hexesA = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,2), Vector2(1,1), Vector2(0,2)]
 	hexesB = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(-1,2), Vector2(-2,2), Vector2(0,2)]
 	set_as(2, 2, ref)
@@ -74,18 +82,24 @@ func set_as_regiment(ref = null):
 	unitcentB = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell))/2
 	setup = true
 
-func get_hexes():
+func get_hexes() -> Array:
 	var hexes = hexesA if isFormA else hexesB
 	var ret = []
 	for hex in hexes:
 		ret.append(grid_ref.get_hex_at(global_position + util.axial_to_canvas(grid_ref.hex_size, hex).rotated(rotation)))
 	return ret
 
-func _ready():
-	if setup:
-		set_form_a()
+func pickup(dragable: Dragable) -> void:
+	if legalloc:
+		footprint.color = HL_COLOR
+		battlefield.remove_unit(get_hexes())
 
-func set_pos_to(glob_position):
+func place(dragable: Dragable) -> void:
+	if legalloc:
+		footprint.color = NORMAL_COLOR
+		battlefield.place_unit(get_hexes())
+
+func set_pos_to(glob_position: Vector2) -> void:
 	var hex = grid_ref.get_hex_at(glob_position)
 	set_global_position(grid_ref.get_hex_center(hex))
 
@@ -96,7 +110,7 @@ func set_pos_to(glob_position):
 		footprint.color = HL_COLOR
 		legalloc = true
 
-func set_front_to(x):
+func set_front_to(x: float) -> void:
 	var deg = ((x + PI) * 180 / PI)
 	if deg < 15 or deg > 345:
 		rotation_degrees = 0
@@ -142,75 +156,20 @@ func set_front_to(x):
 		legalloc = true
 		footprint.color = HL_COLOR
 
-func set_form_a():
+func set_form_a() -> void:
 	footprint.polygon = PoolVector2Array(footcordsA)
-	collisionArea.polygon = PoolVector2Array(footcordsA)
+	$Dragable.polygon = PoolVector2Array(footcordsA)
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentA
 	unit.rotation_degrees = 0
 	pointer.polygon = PoolVector2Array(pointerCoordsA)
 	isFormA = true
 
-func set_form_b():
+func set_form_b() -> void:
 	footprint.polygon = PoolVector2Array(footcordsB)
-	collisionArea.polygon = PoolVector2Array(footcordsB)
+	$Dragable.polygon = PoolVector2Array(footcordsB)
 	unit.polygon = PoolVector2Array(unitcoords)
 	unit.position = unitcentB
 	unit.rotation_degrees = 30
 	pointer.polygon = PoolVector2Array(pointerCoordsB)
 	isFormA = false
-
-var grid_ref
-var can_drag = true
-var mouse_in = false
-var dragging = false
-var pointing = false
-var battlefield
-
-func _on_Unit_mouse_entered():
-	mouse_in = true
-
-func _on_Unit_mouse_exited():
-	mouse_in = false
-
-func _unhandled_input(event):
-	if not can_drag or not setup:
-		return;
-
-	if event is InputEventMouseMotion:
-		if pointing:
-			if not mouse_in:
-				set_front_to(Vector2(0, 1).angle_to((get_global_mouse_position() - global_position)))
-		elif dragging:
-			set_pos_to(get_global_mouse_position())
-		else:
-			pass
-	elif event is InputEventMouseButton && event.button_index == BUTTON_LEFT:
-		# Start pointing
-		if not pointing and mouse_in and event.pressed:
-			if not pointing and not dragging: emit_signal("drag_started", self)
-			pointing = true
-			footprint.color = HL_COLOR
-			print("Start pointing")
-			if legalloc:
-				battlefield.remove_unit(get_hexes())
-		# Start dragging
-		elif not dragging and mouse_in and not event.pressed:
-			if not pointing and not dragging: emit_signal("drag_started", self)
-			dragging = true
-			pointing = false
-			footprint.color = HL_COLOR
-			print("Start dragging")
-			if legalloc:
-				battlefield.remove_unit(get_hexes())
-		# Stop everything
-		elif (dragging or pointing) and not event.pressed:
-			pointing = false
-			dragging = false
-			footprint.color = NORMAL_COLOR if legalloc else ERR_COLOR
-			print("Stopping")
-			emit_signal("drag_ended", self)
-			if legalloc:
-				battlefield.place_unit(get_hexes())
-	else:
-		pass

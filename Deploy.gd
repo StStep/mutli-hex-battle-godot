@@ -6,65 +6,71 @@ onready var nd_troopcount  = get_node("CanvasLayer/UnitPalette/TroopCount")
 onready var nd_regcount  = get_node("CanvasLayer/UnitPalette/RegimentCount")
 onready var nd_battlefield = get_node("Battlefield")
 
-var busy = false
-var linecnt = 6
-var troopcnt = 4
-var regcnt = 2
+var busy : bool = false
+var linecnt : int = 6
+var troopcnt : int = 4
+var regcnt: int = 2
 
-func _ready():
+func _ready() -> void:
 	nd_linecount.text = str(linecnt)
 	nd_troopcount.text = str(troopcnt)
 	nd_regcount.text = str(regcnt)
 
-func _on_Finish_Deployment_pressed():
+func _on_Finish_Deployment_pressed() -> void:
 	get_tree().change_scene("res://TurnX.tscn")
 
-func _on_BtMakeLine_pressed():
+func _on_BtMakeLine_pressed() -> void:
 	if busy: return
 	if linecnt <= 0: return
-	var line = nd_unit.instance()
+
+	var line = nd_unit.instance() as Unit
 	line.set_as_line(nd_battlefield)
-	line.dragging = true
+	var drag = line.get_node("Dragable") as Dragable
+	drag.dragging = true
 	$Units.add_child(line)
-	line.connect("drag_started", self, "_start_dragging")
-	line.connect("drag_ended", self, "_stop_dragging")
-	_start_dragging(line)
+	drag.connect("drag_started", self, "_start_dragging")
+	drag.connect("drag_ended", self, "_stop_dragging")
+	_start_dragging(drag)
 	linecnt -= 1
 	nd_linecount.text = str(linecnt)
 
-func _on_BtMakeTroop_pressed():
+func _on_BtMakeTroop_pressed() -> void:
 	if busy: return
 	if troopcnt <= 0: return
-	var troop = nd_unit.instance()
+
+	var troop = nd_unit.instance() as Unit
 	troop.set_as_troop(nd_battlefield)
-	troop.dragging = true
+	var drag = troop.get_node("Dragable") as Dragable
+	drag.dragging = true
 	$Units.add_child(troop)
-	troop.connect("drag_started", self, "_start_dragging")
-	troop.connect("drag_ended", self, "_stop_dragging")
-	_start_dragging(troop)
+	drag.connect("drag_started", self, "_start_dragging")
+	drag.connect("drag_ended", self, "_stop_dragging")
+	_start_dragging(drag)
 	troopcnt -= 1
 	nd_troopcount.text = str(troopcnt)
 
-func _on_BtMakeRegiment_pressed():
+func _on_BtMakeRegiment_pressed() -> void:
 	if busy: return
 	if regcnt <= 0: return
-	var regiment = nd_unit.instance()
+
+	var regiment = nd_unit.instance() as Unit
 	regiment.set_as_regiment(nd_battlefield)
-	regiment.dragging = true
+	var drag = regiment.get_node("Dragable") as Dragable
+	drag.dragging = true
 	$Units.add_child(regiment)
-	regiment.connect("drag_started", self, "_start_dragging")
-	regiment.connect("drag_ended", self, "_stop_dragging")
-	_start_dragging(regiment)
+	drag.connect("drag_started", self, "_start_dragging")
+	drag.connect("drag_ended", self, "_stop_dragging")
+	_start_dragging(drag)
 	regcnt -= 1
 	nd_regcount.text = str(regcnt)
 
-func _start_dragging(unit):
+func _start_dragging(dragable: Dragable) -> void:
 	busy = true
 	for n in $Units.get_children():
-        n.can_drag = false
-	unit.can_drag = true
+        n.get_node("Dragable").can_drag = false
+	dragable.can_drag = true
 
-func _stop_dragging(unit):
+func _stop_dragging(dragable: Dragable) -> void:
 	busy = false
 	for n in $Units.get_children():
-        n.can_drag = true
+        n.get_node("Dragable").can_drag = true
