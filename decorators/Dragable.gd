@@ -13,8 +13,7 @@ var dragging: bool = false
 var _mouse_in: bool = false
 var _pointing: bool = false
 
-
-func _polygon_set(value: PoolVector2Array):
+func _polygon_set(value: PoolVector2Array) -> void:
     ($CollisionPolygon2D as CollisionPolygon2D).polygon = value
 
 func _polygon_get() -> PoolVector2Array:

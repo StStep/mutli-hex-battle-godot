@@ -3,35 +3,27 @@ class_name Unit
 
 var util = preload("res://Utility.gd")
 
-onready var footprint = get_node("Footprint")
-onready var unit = get_node("Unit")
-onready var pointer = get_node("Pointer")
-
 const NORMAL_COLOR = Color(1, 1, 1, .5)
 const HL_COLOR = Color( .82, .82, .36, .5)
 const ERR_COLOR = Color( .82, 0, 0, .5)
 
 var battlefield
 var grid_ref
+var legalloc: bool = true
 
-var setup = false
-var isFormA = true
-var legalloc = true
-var hexesA
-var hexesB
-var footcordsA
-var footcordsB
-var unitcoords
-var unith
-var unitw
-var unitcentA
-var unitcentB
-var pointerCoordsA
-var pointerCoordsB
+class unit_coords:
+	var hexes: Array
+	var center: Vector2
+	var coords: PoolVector2Array
+	var foot_coords: PoolVector2Array
+	var pointer_coords: PoolVector2Array
+
+var _isFormA: bool = true
+var _a_coords = unit_coords.new()
+var _b_coords = unit_coords.new()
 
 func _ready() -> void:
-	if setup:
-		set_form_a()
+	set_form_a()
 	($Dragable as Dragable).connect("drag_started", self, "pickup")
 	($Dragable as Dragable).connect("drag_ended", self, "place")
 	($Dragable as Dragable).connect("point_to", self, "set_front_to")
@@ -45,45 +37,43 @@ func set_as(wratio: float, hratio: float, ref = null) -> void:
 	else:
 		grid_ref = ref.hexgrid
 
-	unitw = grid_ref.hex_size.y * wratio
-	unith = grid_ref.hex_size.y * hratio
-	unitcoords = [Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)]
-	unitcentA = Vector2(0, unith/2)
+	var unitw: float = grid_ref.hex_size.y * wratio
+	var unith: float = grid_ref.hex_size.y * hratio
+	_a_coords.coords = PoolVector2Array([Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)])
+	_b_coords.coords = PoolVector2Array([Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)])
+	_a_coords.center = Vector2(0, unith/2)
 	var c_coord = util.get_hex_outline(grid_ref.hex_size)
-	pointerCoordsA = [(c_coord[0] + c_coord[1])/2, c_coord[1], c_coord[2] , (c_coord[2] + c_coord[3])/2]
-	pointerCoordsB = [c_coord[1], c_coord[2], c_coord[3]]
+	_a_coords.pointer_coords = PoolVector2Array([(c_coord[0] + c_coord[1])/2, c_coord[1], c_coord[2] , (c_coord[2] + c_coord[3])/2])
+	_b_coords.pointer_coords = PoolVector2Array([c_coord[1], c_coord[2], c_coord[3]])
 
-	footcordsA = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), hexesA)
-	footcordsB = util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), hexesB)
+	_a_coords.foot_coords = PoolVector2Array(util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), _a_coords.hexes))
+	_b_coords.foot_coords = PoolVector2Array(util.get_multi_hex_outline(grid_ref.hex_size, Vector2(0,0), _b_coords.hexes))
 
 func set_as_line(ref = null) -> void:
-	hexesA = [Vector2(-1,1), Vector2(0,0), Vector2(1,0)]
-	hexesB = [Vector2(-1,0), Vector2(0,0), Vector2(1,0)]
+	_a_coords.hexes = [Vector2(-1,1), Vector2(0,0), Vector2(1,0)]
+	_b_coords.hexes = [Vector2(-1,0), Vector2(0,0), Vector2(1,0)]
 	set_as(2, 0.5, ref)
 
-	unitcentB = Vector2(0,0)
-	setup = true
+	_b_coords.center = Vector2(0,0)
 
 func set_as_troop(ref = null) -> void:
-	hexesA = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1)]
-	hexesB = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0)]
+	_a_coords.hexes = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1)]
+	_b_coords.hexes = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0)]
 	set_as(2, 1, ref)
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
-	unitcentB = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell)).normalized() * grid_ref.hex_size.y/2
-	setup = true
+	_b_coords.center = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell)).normalized() * grid_ref.hex_size.y/2
 
 func set_as_regiment(ref = null) -> void:
-	hexesA = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,2), Vector2(1,1), Vector2(0,2)]
-	hexesB = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(-1,2), Vector2(-2,2), Vector2(0,2)]
+	_a_coords.hexes = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,2), Vector2(1,1), Vector2(0,2)]
+	_b_coords.hexes = [Vector2(0,0), Vector2(-1,1), Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(-1,2), Vector2(-2,2), Vector2(0,2)]
 	set_as(2, 2, ref)
 
 	var centercell = grid_ref.get_hex_at(Vector2(0,0))
-	unitcentB = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell))/2
-	setup = true
+	_b_coords.center = (grid_ref.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid_ref.get_hex_center(centercell))/2
 
 func get_hexes() -> Array:
-	var hexes = hexesA if isFormA else hexesB
+	var hexes = _a_coords.hexes if _isFormA else _b_coords.hexes
 	var ret = []
 	for hex in hexes:
 		ret.append(grid_ref.get_hex_at(global_position + util.axial_to_canvas(grid_ref.hex_size, hex).rotated(rotation)))
@@ -91,12 +81,12 @@ func get_hexes() -> Array:
 
 func pickup(dragable: Dragable) -> void:
 	if legalloc:
-		footprint.color = HL_COLOR
+		$Footprint.color = HL_COLOR
 		battlefield.remove_unit(get_hexes())
 
 func place(dragable: Dragable) -> void:
 	if legalloc:
-		footprint.color = NORMAL_COLOR
+		$Footprint.color = NORMAL_COLOR
 		battlefield.place_unit(get_hexes())
 
 func set_pos_to(glob_position: Vector2) -> void:
@@ -104,14 +94,14 @@ func set_pos_to(glob_position: Vector2) -> void:
 	set_global_position(grid_ref.get_hex_center(hex))
 
 	if battlefield != null and !battlefield.is_free(get_hexes()):
-		footprint.color = ERR_COLOR
+		$Footprint.color = ERR_COLOR
 		legalloc = false
 	else:
-		footprint.color = HL_COLOR
+		$Footprint.color = HL_COLOR
 		legalloc = true
 
 func set_front_to(x: float) -> void:
-	var deg = ((x + PI) * 180 / PI)
+	var deg: float = ((x + PI) * 180 / PI)
 	if deg < 15 or deg > 345:
 		rotation_degrees = 0
 		set_form_a()
@@ -150,26 +140,26 @@ func set_front_to(x: float) -> void:
 		set_form_b()
 
 	if battlefield != null and !battlefield.is_free(get_hexes()):
-		footprint.color = ERR_COLOR
+		$Footprint.color = ERR_COLOR
 		legalloc = false
 	else:
 		legalloc = true
-		footprint.color = HL_COLOR
+		$Footprint.color = HL_COLOR
 
 func set_form_a() -> void:
-	footprint.polygon = PoolVector2Array(footcordsA)
-	$Dragable.polygon = PoolVector2Array(footcordsA)
-	unit.polygon = PoolVector2Array(unitcoords)
-	unit.position = unitcentA
-	unit.rotation_degrees = 0
-	pointer.polygon = PoolVector2Array(pointerCoordsA)
-	isFormA = true
+	$Footprint.polygon = _a_coords.foot_coords
+	$Dragable.polygon = _a_coords.foot_coords
+	$Unit.polygon = _a_coords.coords
+	$Unit.position = _a_coords.center
+	$Unit.rotation_degrees = 0
+	$Pointer.polygon = _a_coords.pointer_coords
+	_isFormA = true
 
 func set_form_b() -> void:
-	footprint.polygon = PoolVector2Array(footcordsB)
-	$Dragable.polygon = PoolVector2Array(footcordsB)
-	unit.polygon = PoolVector2Array(unitcoords)
-	unit.position = unitcentB
-	unit.rotation_degrees = 30
-	pointer.polygon = PoolVector2Array(pointerCoordsB)
-	isFormA = false
+	$Footprint.polygon = _b_coords.foot_coords
+	$Dragable.polygon = _b_coords.foot_coords
+	$Unit.polygon = _b_coords.coords
+	$Unit.position = _b_coords.center
+	$Unit.rotation_degrees = 30
+	$Pointer.polygon = _b_coords.pointer_coords
+	_isFormA = false
