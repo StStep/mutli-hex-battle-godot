@@ -4,7 +4,8 @@ extends Node
 onready var nd_grasslayer  = get_node("GrassLayer")
 onready var nd_forestlayer  = get_node("ForestLayer")
 
-var util = preload("res://Utility.gd")
+onready var util = preload("res://Utility.gd")
+onready var unit = preload("res://units//Unit.tscn")
 # offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 var infogrid = [] # Follows tileset orientation
@@ -50,6 +51,23 @@ func is_free(hexes:Array):
 			return false
 	return true
 
+func create_unit(type: String) -> Unit:
+	var u = unit.instance() as Unit
+	match type:
+		"line":
+			u.set_as_line(self)
+		"troop":
+			u.set_as_troop(self)
+		"regiment":
+			u.set_as_regiment(self)
+	var drag = u.get_node("Dragable") as Dragable
+	drag.dragging = true
+	drag.connect("drag_started", self, "_start_dragging")
+	drag.connect("drag_ended", self, "_stop_dragging")
+	_start_dragging(drag)
+	$Units.add_child(u)
+	return u
+
 func place_unit(hexes:Array):
 	for hex in hexes:
 		var pos = util.cube_to_oddq(hex.cube_coords)
@@ -61,3 +79,12 @@ func remove_unit(hexes:Array):
 		var pos = util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 0;
+
+func _start_dragging(dragable: Dragable) -> void:
+	for n in $Units.get_children():
+        n.get_node("Dragable").can_drag = false
+	dragable.can_drag = true
+
+func _stop_dragging(dragable: Dragable) -> void:
+	for n in $Units.get_children():
+        n.get_node("Dragable").can_drag = true

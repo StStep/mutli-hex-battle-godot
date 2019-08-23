@@ -27,3 +27,5 @@ tile_data = PoolIntArray( 196639, 0, 0, 262174, 0, 0, 262175, 0, 0, 393219, 0, 0
 
 [node name="Debug" type="Node" parent="."]
 
+[node name="Units" type="Node" parent="."]
+
