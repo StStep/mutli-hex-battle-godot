@@ -1,4 +1,5 @@
 extends Node
+class_name Battlefield
 
 # Tilesets use odd-q orientation with 0,0 top-left and +,+ toward bottom-right
 onready var nd_grasslayer  = get_node("GrassLayer")
@@ -28,7 +29,7 @@ func _ready():
 		infogrid[c.x][c.y] = 1
 		_draw_hex_at(hexgrid.get_hex_center(util.oddq_to_cube(c)))
 
-func _create_2d_array(width:int, height:int, value):
+static func _create_2d_array(width:int, height:int, value):
     var a = []
     for x in range(width):
         a.append([])
@@ -36,12 +37,6 @@ func _create_2d_array(width:int, height:int, value):
         for y in range(height):
             a[x][y] = value
     return a
-
-func _draw_hex_at(pos:Vector2):
-		var poly = Polygon2D.new()
-		poly.polygon = PoolVector2Array(util.get_hex_outline(hexgrid.hex_size, pos))
-		poly.color = Color(1,0,0,.25)
-		$Debug.add_child(poly)
 
 func is_free(hexes:Array):
 	for hex in hexes:
@@ -55,11 +50,14 @@ func create_unit(type: String) -> Unit:
 	var u = unit.instance() as Unit
 	match type:
 		"line":
-			u.set_as_line(self)
+			u.set_as_line(hexgrid)
 		"troop":
-			u.set_as_troop(self)
+			u.set_as_troop(hexgrid)
 		"regiment":
-			u.set_as_regiment(self)
+			u.set_as_regiment(hexgrid)
+	u.is_available = funcref(self, "is_free")
+	u.connect("placed", self, "_place_unit")
+	u.connect("picked", self, "_remove_unit")
 	var drag = u.get_node("Dragable") as Dragable
 	drag.dragging = true
 	drag.connect("drag_started", self, "_start_dragging")
@@ -68,14 +66,20 @@ func create_unit(type: String) -> Unit:
 	$Units.add_child(u)
 	return u
 
-func place_unit(hexes:Array):
-	for hex in hexes:
+func _draw_hex_at(pos:Vector2):
+		var poly = Polygon2D.new()
+		poly.polygon = PoolVector2Array(util.get_hex_outline(hexgrid.hex_size, pos))
+		poly.color = Color(1,0,0,.25)
+		$Debug.add_child(poly)
+
+func _place_unit(unit: Unit):
+	for hex in unit.get_hexes():
 		var pos = util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 1;
 
-func remove_unit(hexes:Array):
-	for hex in hexes:
+func _remove_unit(unit: Unit):
+	for hex in unit.get_hexes():
 		var pos = util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 0;
