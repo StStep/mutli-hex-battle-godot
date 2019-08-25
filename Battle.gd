@@ -1,22 +1,22 @@
 extends Node
 
-enum BatttleState {NONE, DEPLOYING, MOVEMENT}
+enum BattleState {NONE, DEPLOYING, MOVEMENT}
 
-var state = BatttleState.NONE
+var _state = BattleState.NONE
 
 func _ready() -> void:
 	$DeployGui.create_unit = funcref($Battlefield, "create_unit")
 	$TurnGui.connect("finishedDeploying", self, "_end_deployment")
 
-	_enter_deploy_State()
+	_enter_deploy_state()
 
 func _end_deployment() -> void:
 	_enter_move_state()
 
-func _enter_deploy_State() -> void:
-	state = BatttleState.DEPLOYING
+func _enter_deploy_state() -> void:
+	_state = BattleState.DEPLOYING
 	$DeployGui.enable()
 
 func _enter_move_state() -> void:
-	state = BatttleState.MOVEMENT
+	_state = BattleState.MOVEMENT
 	$DeployGui.disable()

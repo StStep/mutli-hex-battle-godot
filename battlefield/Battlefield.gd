@@ -2,11 +2,11 @@ extends Node
 class_name Battlefield
 
 # Tilesets use odd-q orientation with 0,0 top-left and +,+ toward bottom-right
-onready var nd_grasslayer  = get_node("GrassLayer")
-onready var nd_forestlayer  = get_node("ForestLayer")
+onready var _nd_grasslayer  = get_node("GrassLayer")
+onready var _nd_forestlayer  = get_node("ForestLayer")
 
-onready var util = preload("res://Utility.gd")
-onready var unit = preload("res://units//Unit.tscn")
+onready var _re_util = preload("res://Utility.gd")
+onready var _is_unit = preload("res://units//Unit.tscn")
 # offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 var infogrid = [] # Follows tileset orientation
@@ -18,36 +18,36 @@ export var hex_scale = Vector2(110, 110)
 
 func _ready():
 	hexgrid.hex_scale = hex_scale
-	var szrect = nd_grasslayer.get_used_rect ()
+	var szrect = _nd_grasslayer.get_used_rect ()
 	var offset = szrect.position
 	width = szrect.size.x
 	height = szrect.size.y
 	infogrid = _create_2d_array(width, height, 0)
 	unitgrid = _create_2d_array(width, height, 0)
 	print("Making an array with offset %s and size %s" % [offset, szrect.size])
-	for c in nd_forestlayer.get_used_cells():
+	for c in _nd_forestlayer.get_used_cells():
 		infogrid[c.x][c.y] = 1
-		_draw_hex_at(hexgrid.get_hex_center(util.oddq_to_cube(c)))
+		_draw_hex_at(hexgrid.get_hex_center(_re_util.oddq_to_cube(c)))
 
-static func _create_2d_array(width:int, height:int, value):
+static func _create_2d_array(w:int, h:int, value) -> Array:
     var a = []
-    for x in range(width):
+    for x in range(w):
         a.append([])
-        a[x].resize(height)
-        for y in range(height):
+        a[x].resize(h)
+        for y in range(h):
             a[x][y] = value
     return a
 
 func is_free(hexes:Array):
 	for hex in hexes:
-		var pos = util.cube_to_oddq(hex.cube_coords)
+		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x < 0 or pos.x >= width or pos.y < 0 or pos.y >= height \
 			or infogrid[pos.x][pos.y] != 0 or unitgrid[pos.x][pos.y] != 0:
 			return false
 	return true
 
 func create_unit(type: String) -> Unit:
-	var u = unit.instance() as Unit
+	var u = _is_unit.instance() as Unit
 	match type:
 		"line":
 			u.set_as_line(hexgrid)
@@ -55,7 +55,7 @@ func create_unit(type: String) -> Unit:
 			u.set_as_troop(hexgrid)
 		"regiment":
 			u.set_as_regiment(hexgrid)
-	u.is_available = funcref(self, "is_free")
+	u.fr_are_hexes_empty = funcref(self, "is_free")
 	u.connect("placed", self, "_place_unit")
 	u.connect("picked", self, "_remove_unit")
 	var drag = u.get_node("Dragable") as Dragable
@@ -68,19 +68,19 @@ func create_unit(type: String) -> Unit:
 
 func _draw_hex_at(pos:Vector2):
 		var poly = Polygon2D.new()
-		poly.polygon = PoolVector2Array(util.get_hex_outline(hexgrid.hex_size, pos))
+		poly.polygon = PoolVector2Array(_re_util.get_hex_outline(hexgrid.hex_size, pos))
 		poly.color = Color(1,0,0,.25)
 		$Debug.add_child(poly)
 
 func _place_unit(unit: Unit):
 	for hex in unit.get_hexes():
-		var pos = util.cube_to_oddq(hex.cube_coords)
+		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 1;
 
 func _remove_unit(unit: Unit):
 	for hex in unit.get_hexes():
-		var pos = util.cube_to_oddq(hex.cube_coords)
+		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 0;
 

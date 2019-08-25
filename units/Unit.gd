@@ -1,11 +1,14 @@
 extends Node2D
 class_name Unit
 
+enum UnitState {NONE, PLACING, MOVING}
+
 signal placed(unit)
 signal picked(unit)
 
-var legalloc: bool = true
-var is_available: FuncRef
+var state = UnitState.NONE setget _set_state, _get_state
+var legalloc: bool = true setget ,_get_legalloc
+var fr_are_hexes_empty: FuncRef
 
 class unit_coords:
 	var hexes: Array
@@ -14,7 +17,7 @@ class unit_coords:
 	var foot_coords: PoolVector2Array
 	var pointer_coords: PoolVector2Array
 
-var _util = preload("res://Utility.gd")
+var _re_util = preload("res://Utility.gd")
 
 const _NORMAL_COLOR = Color(1, 1, 1, .5)
 const _HL_COLOR = Color( .82, .82, .36, .5)
@@ -32,6 +35,15 @@ func _ready() -> void:
 	($Dragable as Dragable).connect("point_to", self, "set_front_to")
 	($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
 
+func _set_state(value):
+	state = value
+
+func _get_state():
+	return state
+
+func _get_legalloc() -> bool:
+	return legalloc
+
 func _set_as(wratio: float, hratio: float, grid = null) -> void:
 	if grid == null:
 		_grid_ref = load("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
@@ -44,12 +56,14 @@ func _set_as(wratio: float, hratio: float, grid = null) -> void:
 	_a_coords.coords = PoolVector2Array([Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)])
 	_b_coords.coords = PoolVector2Array([Vector2(-unitw/2, -unith/2), Vector2(unitw/2, -unith/2), Vector2(unitw/2, unith/2), Vector2(-unitw/2, unith/2)])
 	_a_coords.center = Vector2(0, unith/2)
-	var c_coord = _util.get_hex_outline(_grid_ref.hex_size)
+	var c_coord = _re_util.get_hex_outline(_grid_ref.hex_size)
 	_a_coords.pointer_coords = PoolVector2Array([(c_coord[0] + c_coord[1])/2, c_coord[1], c_coord[2] , (c_coord[2] + c_coord[3])/2])
 	_b_coords.pointer_coords = PoolVector2Array([c_coord[1], c_coord[2], c_coord[3]])
 
-	_a_coords.foot_coords = PoolVector2Array(_util.get_multi_hex_outline(_grid_ref.hex_size, Vector2(0,0), _a_coords.hexes))
-	_b_coords.foot_coords = PoolVector2Array(_util.get_multi_hex_outline(_grid_ref.hex_size, Vector2(0,0), _b_coords.hexes))
+	_a_coords.foot_coords = PoolVector2Array(_re_util.get_multi_hex_outline(_grid_ref.hex_size, Vector2(0,0), _a_coords.hexes))
+	_b_coords.foot_coords = PoolVector2Array(_re_util.get_multi_hex_outline(_grid_ref.hex_size, Vector2(0,0), _b_coords.hexes))
+
+	_set_state(UnitState.PLACING)
 
 func set_as_line(grid = null) -> void:
 	_a_coords.hexes = [Vector2(-1,1), Vector2(0,0), Vector2(1,0)]
@@ -78,14 +92,14 @@ func get_hexes() -> Array:
 	var hexes = _a_coords.hexes if _isFormA else _b_coords.hexes
 	var ret = []
 	for hex in hexes:
-		ret.append(_grid_ref.get_hex_at(global_position + _util.axial_to_canvas(_grid_ref.hex_size, hex).rotated(rotation)))
+		ret.append(_grid_ref.get_hex_at(global_position + _re_util.axial_to_canvas(_grid_ref.hex_size, hex).rotated(rotation)))
 	return ret
 
 func set_pos_to(glob_position: Vector2) -> void:
 	var hex = _grid_ref.get_hex_at(glob_position)
 	set_global_position(_grid_ref.get_hex_center(hex))
 
-	if is_available != null and !is_available.call_func(get_hexes()):
+	if fr_are_hexes_empty != null and !fr_are_hexes_empty.call_func(get_hexes()):
 		$Footprint.color = _ERR_COLOR
 		legalloc = false
 	else:
@@ -131,7 +145,7 @@ func set_front_to(x: float) -> void:
 		rotation_degrees = 300
 		_set_form_b()
 
-	if is_available != null and !is_available.call_func(get_hexes()):
+	if fr_are_hexes_empty != null and !fr_are_hexes_empty.call_func(get_hexes()):
 		$Footprint.color = _ERR_COLOR
 		legalloc = false
 	else:
