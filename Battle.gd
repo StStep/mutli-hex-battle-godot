@@ -1,8 +1,22 @@
 extends Node
 
-func _ready() -> void:
-	$Deploy.create_unit = funcref($Battlefield, "create_unit")
-	$Deploy.connect("finished", self, "_finished")
+enum BatttleState {NONE, DEPLOYING, MOVEMENT}
 
-func _finished() -> void:
-	print("Finished")
+var state = BatttleState.NONE
+
+func _ready() -> void:
+	$DeployGui.create_unit = funcref($Battlefield, "create_unit")
+	$TurnGui.connect("finishedDeploying", self, "_end_deployment")
+
+	_enter_deploy_State()
+
+func _end_deployment() -> void:
+	_enter_move_state()
+
+func _enter_deploy_State() -> void:
+	state = BatttleState.DEPLOYING
+	$DeployGui.enable()
+
+func _enter_move_state() -> void:
+	state = BatttleState.MOVEMENT
+	$DeployGui.disable()

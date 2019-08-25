@@ -61,7 +61,6 @@ func _unhandled_input(event) -> void:
 		elif (dragging or _pointing) and not event.pressed:
 			_pointing = false
 			dragging = false
-			print("Stopping")
 			emit_signal("drag_ended", self)
 	else:
 		pass

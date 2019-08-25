@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Battle.gd" type="Script" id=1]
 [ext_resource path="res://battlefield/Battlefield.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/RTS-Camera2D.gd" type="Script" id=3]
 [ext_resource path="res://addons/carmel4a97.RTS_Camera2D/node_icon.png" type="Texture" id=4]
-[ext_resource path="res://Deploy.tscn" type="PackedScene" id=5]
+[ext_resource path="res://guis/DeployGui.tscn" type="PackedScene" id=5]
+[ext_resource path="res://guis/TurnGui.tscn" type="PackedScene" id=6]
 
 [node name="Battle" type="Node"]
 script = ExtResource( 1 )
@@ -27,5 +28,7 @@ zoom_out_limit = 3
 camera_speed = 800
 camera_margin = 0
 
-[node name="Deploy" parent="." instance=ExtResource( 5 )]
+[node name="DeployGui" parent="." instance=ExtResource( 5 )]
+
+[node name="TurnGui" parent="." instance=ExtResource( 6 )]
 
