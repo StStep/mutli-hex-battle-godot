@@ -61,6 +61,7 @@ func create_unit(type: String) -> Unit:
 	u.fr_are_hexes_empty = funcref(self, "is_free")
 	u.connect("placed", self, "_place_unit")
 	u.connect("picked", self, "_remove_unit")
+	u.state = Unit.UnitState.PLACING
 	var drag = u.get_node("Dragable") as Dragable
 	drag.dragging = true
 	drag.connect("drag_started", self, "_start_dragging")
