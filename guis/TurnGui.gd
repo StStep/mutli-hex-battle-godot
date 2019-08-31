@@ -6,8 +6,9 @@ signal finishedTurn()
 var turn = 0
 
 func _ready() -> void:
-	$FinishDeploy.connect("button_down", self, "_on_finish_deploy")
-	$FinishTurn.connect("button_down", self, "_on_finish_turn")
+	var _c
+	_c = $FinishDeploy.connect("button_down", self, "_on_finish_deploy")
+	_c = $FinishTurn.connect("button_down", self, "_on_finish_turn")
 	$FinishTurn.visible = false
 
 func _on_finish_deploy() -> void:

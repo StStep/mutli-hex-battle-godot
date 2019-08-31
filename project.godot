@@ -36,6 +36,10 @@ config/name="Multi-Hex Battle Game"
 run/main_scene="res://Start.tscn"
 config/icon="res://icon.png"
 
+[debug]
+
+gdscript/warnings/unused_class_variable=false
+
 [editor_plugins]
 
 enabled=PoolStringArray( "carmel4a97.RTS_Camera2D", "godot-notes", "romlok.GDHexGrid" )

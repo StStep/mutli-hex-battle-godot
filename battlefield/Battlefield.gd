@@ -92,6 +92,6 @@ func _start_dragging(dragable: Dragable) -> void:
         n.get_node("Dragable").can_drag = false
 	dragable.can_drag = true
 
-func _stop_dragging(dragable: Dragable) -> void:
+func _stop_dragging(_dragable: Dragable) -> void:
 	for n in $Units.get_children():
         n.get_node("Dragable").can_drag = true

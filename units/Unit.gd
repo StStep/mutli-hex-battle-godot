@@ -30,10 +30,11 @@ var _b_coords = unit_coords.new()
 
 func _ready() -> void:
 	_set_form_a()
-	($Dragable as Dragable).connect("drag_started", self, "_pickup")
-	($Dragable as Dragable).connect("drag_ended", self, "_place")
-	($Dragable as Dragable).connect("point_to", self, "set_front_to")
-	($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
+	var _c
+	_c = ($Dragable as Dragable).connect("drag_started", self, "_pickup")
+	_c = ($Dragable as Dragable).connect("drag_ended", self, "_place")
+	_c = ($Dragable as Dragable).connect("point_to", self, "set_front_to")
+	_c = ($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
 
 func _set_state(value) -> void:
 	if state == value:
@@ -190,12 +191,12 @@ func _set_form_b() -> void:
 	$Pointer.polygon = _b_coords.pointer_coords
 	_isFormA = false
 
-func _pickup(dragable: Dragable) -> void:
+func _pickup(_dragable: Dragable) -> void:
 	if legalloc:
 		$Footprint.color = _HL_COLOR
 		emit_signal("picked", self)
 
-func _place(dragable: Dragable) -> void:
+func _place(_dragable: Dragable) -> void:
 	if legalloc:
 		$Footprint.color = _NORMAL_COLOR
 		emit_signal("placed", self)

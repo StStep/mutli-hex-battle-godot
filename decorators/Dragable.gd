@@ -14,10 +14,10 @@ var _mouse_in: bool = false
 var _pointing: bool = false
 
 func _set_polygon(value: PoolVector2Array) -> void:
-    ($CollisionPolygon2D as CollisionPolygon2D).polygon = value
+	($CollisionPolygon2D as CollisionPolygon2D).polygon = value
 
 func _get_polygon() -> PoolVector2Array:
-    return ($CollisionPolygon2D as CollisionPolygon2D).polygon
+	return ($CollisionPolygon2D as CollisionPolygon2D).polygon
 
 func _set_can_drag(value: bool)-> void:
 	if value == can_drag:
@@ -30,8 +30,9 @@ func _get_can_drag() -> bool:
 	return can_drag
 
 func _ready() -> void:
-	connect("mouse_entered",self, "_on_mouse_entered")
-	connect("mouse_exited",self, "_on_mouse_exited")
+	var _c
+	_c = connect("mouse_entered",self, "_on_mouse_entered")
+	_c = connect("mouse_exited",self, "_on_mouse_exited")
 	var col_area = CollisionPolygon2D.new()
 	col_area.name = "CollisionPolygon2D"
 	col_area.z_index = 1

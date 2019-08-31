@@ -6,7 +6,7 @@ var _state = BattleState.NONE
 
 func _ready() -> void:
 	$DeployGui.create_unit = funcref($Battlefield, "create_unit")
-	$TurnGui.connect("finishedDeploying", self, "_end_deployment")
+	var _c = $TurnGui.connect("finishedDeploying", self, "_end_deployment")
 
 	_enter_deploy_state()
 
