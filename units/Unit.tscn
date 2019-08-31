@@ -16,5 +16,7 @@ color = Color( 0.737255, 0.137255, 0.137255, 1 )
 color = Color( 0, 0, 0, 1 )
 
 [node name="Dragable" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
 script = ExtResource( 2 )
 

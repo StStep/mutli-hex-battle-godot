@@ -35,7 +35,27 @@ func _ready() -> void:
 	($Dragable as Dragable).connect("point_to", self, "set_front_to")
 	($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
 
-func _set_state(value):
+func _set_state(value) -> void:
+	if state == value:
+		return
+
+	# Prev State
+	match(state):
+		UnitState.PLACING:
+			$Dragable.can_drag = false
+		UnitState.MOVING:
+			pass
+		_:
+			pass
+
+	# Future State
+	match(value):
+		UnitState.PLACING:
+			$Dragable.can_drag = true
+		UnitState.MOVING:
+			pass
+		_:
+			assert(true)
 	state = value
 
 func _get_state():

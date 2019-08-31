@@ -16,7 +16,7 @@ var height
 
 export var hex_scale = Vector2(110, 110)
 
-func _ready():
+func _ready() -> void:
 	hexgrid.hex_scale = hex_scale
 	var szrect = _nd_grasslayer.get_used_rect ()
 	var offset = szrect.position
@@ -38,13 +38,16 @@ static func _create_2d_array(w:int, h:int, value) -> Array:
             a[x][y] = value
     return a
 
-func is_free(hexes:Array):
+func is_free(hexes:Array) -> bool:
 	for hex in hexes:
 		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x < 0 or pos.x >= width or pos.y < 0 or pos.y >= height \
 			or infogrid[pos.x][pos.y] != 0 or unitgrid[pos.x][pos.y] != 0:
 			return false
 	return true
+
+func get_units() -> Array:
+	return $Units.get_children()
 
 func create_unit(type: String) -> Unit:
 	var u = _is_unit.instance() as Unit
@@ -66,19 +69,19 @@ func create_unit(type: String) -> Unit:
 	$Units.add_child(u)
 	return u
 
-func _draw_hex_at(pos:Vector2):
+func _draw_hex_at(pos:Vector2) -> void:
 		var poly = Polygon2D.new()
 		poly.polygon = PoolVector2Array(_re_util.get_hex_outline(hexgrid.hex_size, pos))
 		poly.color = Color(1,0,0,.25)
 		$Debug.add_child(poly)
 
-func _place_unit(unit: Unit):
+func _place_unit(unit: Unit) -> void:
 	for hex in unit.get_hexes():
 		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 1;
 
-func _remove_unit(unit: Unit):
+func _remove_unit(unit: Unit) -> void:
 	for hex in unit.get_hexes():
 		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:

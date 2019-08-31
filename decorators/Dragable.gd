@@ -6,18 +6,28 @@ signal drag_ended(dragable)
 signal point_to(angle)
 signal drag_to(position)
 
-var polygon: PoolVector2Array setget _polygon_set, _polygon_get
-var can_drag: bool = true
+var polygon: PoolVector2Array setget _set_polygon, _get_polygon
+var can_drag: bool = true setget _set_can_drag, _get_can_drag
 var dragging: bool = false
 
 var _mouse_in: bool = false
 var _pointing: bool = false
 
-func _polygon_set(value: PoolVector2Array) -> void:
+func _set_polygon(value: PoolVector2Array) -> void:
     ($CollisionPolygon2D as CollisionPolygon2D).polygon = value
 
-func _polygon_get() -> PoolVector2Array:
+func _get_polygon() -> PoolVector2Array:
     return ($CollisionPolygon2D as CollisionPolygon2D).polygon
+
+func _set_can_drag(value: bool)-> void:
+	if value == can_drag:
+		return
+
+	set_process_unhandled_input(value)
+	can_drag = value
+
+func _get_can_drag() -> bool:
+	return can_drag
 
 func _ready() -> void:
 	connect("mouse_entered",self, "_on_mouse_entered")
