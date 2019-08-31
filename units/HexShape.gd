@@ -1,7 +1,7 @@
 extends Node2D
 class_name HexShape
 
-enum HexColor {NONE, HIGHLIGHTED, ERROR}
+enum HexColor {NONE, HIGHLIGHTED, ERROR, GHOST}
 
 var _re_util = preload("res://Utility.gd")
 
@@ -14,9 +14,13 @@ class unit_coords:
 
 var polygon setget ,_get_polygon
 
-const _NORMAL_COLOR = Color(1, 1, 1, .5)
-const _HL_COLOR = Color( .82, .82, .36, .5)
-const _ERR_COLOR = Color( .82, 0, 0, .5)
+const _NORMAL_FT_COLOR = Color(1, 1, 1, .5)
+const _HL_FT_COLOR = Color( .82, .82, .36, .5)
+const _ERR_FT_COLOR = Color( .82, 0, 0, .5)
+const _GHOST_FT_COLOR = Color(1, 1, 1, .2)
+
+const _NORMAL_BLK_COLOR = Color(.74, .14, .14, 1)
+const _GHOST_BLK_COLOR = Color(.74, .14, .14, .5)
 
 var _grid_ref
 var _isFormA: bool = true
@@ -100,11 +104,17 @@ func set_front_to(x: float) -> void:
 func set_hexcolor(hexColor):
 	match(hexColor):
 		HexColor.HIGHLIGHTED:
-			$Footprint.color = _HL_COLOR
+			$Footprint.color = _HL_FT_COLOR
+			$Block.color = _NORMAL_BLK_COLOR
 		HexColor.ERROR:
-			$Footprint.color = _ERR_COLOR
+			$Footprint.color = _ERR_FT_COLOR
+			$Block.color = _NORMAL_BLK_COLOR
+		HexColor.GHOST:
+			$Footprint.color = _GHOST_FT_COLOR
+			$Block.color = _GHOST_BLK_COLOR
 		_:
-			$Footprint.color = _NORMAL_COLOR
+			$Footprint.color = _NORMAL_FT_COLOR
+			$Block.color = _NORMAL_BLK_COLOR
 
 
 func _set_form_a() -> void:

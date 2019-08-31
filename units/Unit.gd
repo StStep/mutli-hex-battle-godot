@@ -16,6 +16,9 @@ func _ready() -> void:
 	_c = ($Dragable as Dragable).connect("drag_ended", self, "_place")
 	_c = ($Dragable as Dragable).connect("point_to", self, "set_front_to")
 	_c = ($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
+	_c = ($FollowOnClickable as FollowOnClickable).connect("updated", $Preview, "set_pos_to")
+	$Preview.hide()
+	$Preview.set_hexcolor(HexShape.HexColor.GHOST)
 
 func _set_state(value) -> void:
 	if state == value:
@@ -26,7 +29,8 @@ func _set_state(value) -> void:
 		UnitState.PLACING:
 			$Dragable.can_drag = false
 		UnitState.MOVING:
-			pass
+			$Preview.hide()
+			$FollowOnClickable.enabled = false
 		_:
 			pass
 
@@ -35,7 +39,11 @@ func _set_state(value) -> void:
 		UnitState.PLACING:
 			$Dragable.can_drag = true
 		UnitState.MOVING:
-			pass
+			$Preview.show()
+			$FollowOnClickable.global_position = $Dragable.global_position
+			$FollowOnClickable.polygon = $Dragable.polygon
+			$FollowOnClickable.rotation_degrees = $Dragable.rotation_degrees
+			$FollowOnClickable.enabled = true
 		_:
 			assert(true)
 	state = value
@@ -63,7 +71,8 @@ func set_as_line(grid = null) -> void:
 
 	var ahexes = [Vector2(-1,1), Vector2(0,0), Vector2(1,0)]
 	var bhexes = [Vector2(-1,0), Vector2(0,0), Vector2(1,0)]
-	$HexShape.set_as(ahexes, bhexes, 2, 0.5, Vector2(0,0), grid)
+	($HexShape as HexShape).set_as(ahexes, bhexes, 2, 0.5, Vector2(0,0), grid)
+	($Preview as HexShape).set_as(ahexes, bhexes, 2, 0.5, Vector2(0,0), grid)
 
 func set_as_troop(grid = null) -> void:
 	if grid == null:
@@ -75,6 +84,7 @@ func set_as_troop(grid = null) -> void:
 	var centercell = grid.get_hex_at(Vector2(0,0))
 	var bcenter = (grid.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid.get_hex_center(centercell)).normalized() * grid.hex_size.y/2
 	($HexShape as HexShape).set_as(ahexes, bhexes, 2, 1, bcenter, grid)
+	($Preview as HexShape).set_as(ahexes, bhexes, 2, 1, bcenter, grid)
 
 func set_as_regiment(grid = null) -> void:
 	if grid == null:
@@ -86,6 +96,7 @@ func set_as_regiment(grid = null) -> void:
 	var centercell = grid.get_hex_at(Vector2(0,0))
 	var bcenter = (grid.get_hex_center(centercell.get_adjacent(centercell.DIR_S).get_adjacent(centercell.DIR_SW)) - grid.get_hex_center(centercell))/2
 	($HexShape as HexShape).set_as(ahexes, bhexes, 2, 2, bcenter, grid)
+	($Preview as HexShape).set_as(ahexes, bhexes, 2, 2, bcenter, grid)
 
 func get_hexes() -> Array:
 	return $HexShape.get_hexes()
