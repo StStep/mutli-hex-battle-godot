@@ -6,18 +6,28 @@ signal drag_ended(dragable)
 signal point_to(angle)
 signal drag_to(position)
 
-var polygon: PoolVector2Array setget _set_polygon, _get_polygon
+var polygon: Array setget _set_polygon, _get_polygon
 var can_drag: bool = true setget _set_can_drag, _get_can_drag
 var dragging: bool = false
 
 var _mouse_in: bool = false
 var _pointing: bool = false
 
-func _set_polygon(value: PoolVector2Array) -> void:
-	($CollisionPolygon2D as CollisionPolygon2D).polygon = value
+func _set_polygon(value: Array) -> void:
+	if not has_node("CollisionPolygon2D"):
+		var col_area = CollisionPolygon2D.new()
+		col_area.name = "CollisionPolygon2D"
+		col_area.z_index = 1
+		add_child(col_area)
+		col_area.polygon = PoolVector2Array(value)
+	else:
+		get_node("CollisionPolygon2D").polygon = PoolVector2Array(value)
 
-func _get_polygon() -> PoolVector2Array:
-	return ($CollisionPolygon2D as CollisionPolygon2D).polygon
+func _get_polygon() -> Array:
+	if not has_node("CollisionPolygon2D"):
+		return []
+	else:
+		return Array(get_node("CollisionPolygon2D").polygon)
 
 func _set_can_drag(value: bool)-> void:
 	if value == can_drag:
@@ -33,10 +43,8 @@ func _ready() -> void:
 	var _c
 	_c = connect("mouse_entered",self, "_on_mouse_entered")
 	_c = connect("mouse_exited",self, "_on_mouse_exited")
-	var col_area = CollisionPolygon2D.new()
-	col_area.name = "CollisionPolygon2D"
-	col_area.z_index = 1
-	add_child(col_area)
+	monitoring = false
+	monitorable = false
 
 func _on_mouse_entered() -> void:
 	_mouse_in = true
