@@ -37,6 +37,14 @@ This is like a tabletop war-game, where unit deployment happens before the first
     * All units are same width
     * Lines are half the depth of troops which are half the depth of regiments
 
+* `demos/demo_movement.tscn` - Deploy and then move a unit, using spacebar to switch modes
+
+    * Unit starts in deploy mode, click and/or drag to place and/or rotate unit
+    * Click again in current mode on unit to re-deploy
+    * Use space to enter move mode, which is indicated with on-screen text
+    * Click once to start moving the unit as close as possible to mouse given the valid movement locations
+    * Click again so stop moving
+
 * `demos/utility_test.tscn` - Test out functions from `Utility.gd`
 
 ## Known Issues
