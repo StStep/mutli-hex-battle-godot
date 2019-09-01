@@ -45,6 +45,9 @@ func _set_state(value) -> void:
 		UnitState.MOVING:
 			$Preview.hide()
 			$FollowOnClickable.enabled = false
+			for p in _drawnHexes:
+				p.queue_free()
+			_drawnHexes.clear()
 		_:
 			pass
 
@@ -54,6 +57,7 @@ func _set_state(value) -> void:
 			$Dragable.can_drag = true
 		UnitState.MOVING:
 			$Preview.show()
+			$Preview.set_pos_to($HexShape.global_position)
 			$Preview.set_front_to_deg($HexShape.front_dir_deg)
 			$FollowOnClickable.global_position = $Dragable.global_position
 			$FollowOnClickable.polygon = $Dragable.polygon

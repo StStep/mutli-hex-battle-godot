@@ -13,7 +13,7 @@ class unit_coords:
 	var pointer_coords: PoolVector2Array
 
 var central_hex setget ,_get_central_hex
-var polygon: Array setget ,_get_polygon
+var polygon: PoolVector2Array setget ,_get_polygon
 var front_dir_deg: float setget ,_get_front_dir_deg
 var is_formA: bool = true setget ,_get_is_formA
 
@@ -35,7 +35,7 @@ func _ready() -> void:
 func _get_central_hex():
 	return _grid_ref.get_hex_at(global_position)
 
-func _get_polygon() -> Array:
+func _get_polygon() -> PoolVector2Array:
 	return $Footprint.polygon
 
 func _get_front_dir_deg() -> float:
@@ -133,7 +133,6 @@ func set_hexcolor(hexColor):
 		_:
 			$Footprint.color = _NORMAL_FT_COLOR
 			$Block.color = _NORMAL_BLK_COLOR
-
 
 func _set_form_a() -> void:
 	$Footprint.polygon = _a_coords.foot_coords
