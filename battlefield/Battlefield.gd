@@ -27,7 +27,7 @@ func _ready() -> void:
 	print("Making an array with offset %s and size %s" % [offset, szrect.size])
 	for c in _nd_forestlayer.get_used_cells():
 		infogrid[c.x][c.y] = 1
-		_draw_hex_at(hexgrid.get_hex_center(_re_util.oddq_to_cube(c)))
+		var _p = _draw_hex_at_pos(hexgrid.get_hex_center(_re_util.oddq_to_cube(c)), Color(1,0,0,.25))
 
 static func _create_2d_array(w:int, h:int, value) -> Array:
     var a = []
@@ -59,6 +59,7 @@ func create_unit(type: String) -> Unit:
 		"regiment":
 			u.set_as_regiment(hexgrid)
 	u.fr_are_hexes_empty = funcref(self, "is_free")
+	u.fr_draw_hex = funcref(self, "_draw_hex")
 	u.connect("placed", self, "_place_unit")
 	u.connect("picked", self, "_remove_unit")
 	u.state = Unit.UnitState.PLACING
@@ -70,11 +71,15 @@ func create_unit(type: String) -> Unit:
 	$Units.add_child(u)
 	return u
 
-func _draw_hex_at(pos:Vector2) -> void:
+func _draw_hex_at_pos(pos: Vector2, color: Color) -> Polygon2D:
 		var poly = Polygon2D.new()
 		poly.polygon = PoolVector2Array(_re_util.get_hex_outline(hexgrid.hex_size, pos))
-		poly.color = Color(1,0,0,.25)
+		poly.color = color
 		$Debug.add_child(poly)
+		return poly
+
+func _draw_hex(hex, color: Color) -> Polygon2D:
+	return _draw_hex_at_pos(hexgrid.get_hex_center(hex), color)
 
 func _place_unit(unit: Unit) -> void:
 	for hex in unit.get_hexes():

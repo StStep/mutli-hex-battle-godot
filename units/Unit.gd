@@ -9,6 +9,9 @@ signal picked(unit)
 var state = UnitState.NONE setget _set_state, _get_state
 var legalloc: bool = true setget ,_get_legalloc
 var fr_are_hexes_empty: FuncRef
+var fr_draw_hex: FuncRef
+
+var _drawnHexes: Array = []
 
 func _ready() -> void:
 	var _c
@@ -16,7 +19,7 @@ func _ready() -> void:
 	_c = ($Dragable as Dragable).connect("drag_ended", self, "_place")
 	_c = ($Dragable as Dragable).connect("point_to", self, "set_front_to")
 	_c = ($Dragable as Dragable).connect("drag_to", self, "set_pos_to")
-	_c = ($FollowOnClickable as FollowOnClickable).connect("updated", $Preview, "set_pos_to")
+	_c = ($FollowOnClickable as FollowOnClickable).connect("updated", self, "_set_prev_to")
 	$Preview.hide()
 	$Preview.set_hexcolor(HexShape.HexColor.GHOST)
 
@@ -40,6 +43,7 @@ func _set_state(value) -> void:
 			$Dragable.can_drag = true
 		UnitState.MOVING:
 			$Preview.show()
+			$Preview.set_front_to($HexShape.front_dir)
 			$FollowOnClickable.global_position = $Dragable.global_position
 			$FollowOnClickable.polygon = $Dragable.polygon
 			$FollowOnClickable.rotation_degrees = $Dragable.rotation_degrees
@@ -119,3 +123,12 @@ func _update_loc():
 	$Dragable.global_position = $HexShape.global_position
 	$Dragable.polygon = $HexShape.polygon
 	$Dragable.rotation_degrees = $HexShape.rotation_degrees
+
+func _set_prev_to(glob_position: Vector2) -> void:
+	for p in _drawnHexes:
+		p.queue_free()
+	_drawnHexes.clear()
+	$Preview.set_pos_to(glob_position)
+	for hex in $HexShape.central_hex.line_to($Preview.central_hex):
+		if fr_draw_hex != null:
+			_drawnHexes.append(fr_draw_hex.call_func(hex, Color(.2,.2,.8,.8)))

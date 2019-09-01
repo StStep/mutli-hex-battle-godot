@@ -12,7 +12,9 @@ class unit_coords:
 	var foot_coords: PoolVector2Array
 	var pointer_coords: PoolVector2Array
 
-var polygon setget ,_get_polygon
+var central_hex setget ,_get_central_hex
+var polygon: Array setget ,_get_polygon
+var front_dir: float setget ,_get_front_dir
 
 const _NORMAL_FT_COLOR = Color(1, 1, 1, .5)
 const _HL_FT_COLOR = Color( .82, .82, .36, .5)
@@ -30,8 +32,14 @@ var _b_coords = unit_coords.new()
 func _ready() -> void:
 	_set_form_a()
 
+func _get_central_hex():
+	return _grid_ref.get_hex_at(global_position)
+
 func _get_polygon() -> Array:
 	return $Footprint.polygon
+
+func _get_front_dir() -> float:
+	return front_dir
 
 func set_as(ahexes: Array, bhexes: Array, wratio: float, hratio: float, bcenter:Vector2, grid = null) -> void:
 	_grid_ref = grid
@@ -63,6 +71,7 @@ func set_pos_to(glob_position: Vector2) -> void:
 	set_global_position(_grid_ref.get_hex_center(hex))
 
 func set_front_to(x: float) -> void:
+	front_dir = x
 	var deg: float = ((x + PI) * 180 / PI)
 	if deg < 15 or deg > 345:
 		rotation_degrees = 0
