@@ -1,12 +1,13 @@
 extends Node
-class_name Battlefield
+class_name HexBattlefield
 
 # Tilesets use odd-q orientation with 0,0 top-left and +,+ toward bottom-right
 onready var _nd_grasslayer  = get_node("GrassLayer")
 onready var _nd_forestlayer  = get_node("ForestLayer")
 
 onready var _re_util = preload("res://Utility.gd")
-onready var _is_unit = preload("res://units//Unit.tscn")
+onready var _re_unit = preload("res://battlefield/Unit.gd")
+onready var _is_unit = preload("res://battlefield/hexunit/HexUnit.tscn")
 # offset_coords uses even-q with 0,0 top-left and +,- toward bottom-right, mostly use cube_coords for conv
 var hexgrid = preload("res://addons/romlok.GDHexGrid/HexGrid.gd").new()
 var infogrid = [] # Follows tileset orientation
@@ -49,8 +50,8 @@ func is_free(hexes:Array) -> bool:
 func get_units() -> Array:
 	return $Units.get_children()
 
-func create_unit(type: String) -> Unit:
-	var u = _is_unit.instance() as Unit
+func create_unit(type: String) -> HexUnit:
+	var u = _is_unit.instance() as HexUnit
 	match type:
 		"line":
 			u.set_as_line(hexgrid)
@@ -62,7 +63,7 @@ func create_unit(type: String) -> Unit:
 	u.fr_draw_hex = funcref(self, "_draw_hex")
 	u.connect("placed", self, "_place_unit")
 	u.connect("picked", self, "_remove_unit")
-	u.state = Unit.UnitState.PLACING
+	u.state = _re_unit.State.PLACING
 	var drag = u.get_node("Dragable") as Dragable
 	drag.dragging = true
 	drag.connect("drag_started", self, "_start_dragging")
@@ -81,13 +82,13 @@ func _draw_hex_at_pos(pos: Vector2, color: Color) -> Polygon2D:
 func _draw_hex(hex, color: Color) -> Polygon2D:
 	return _draw_hex_at_pos(hexgrid.get_hex_center(hex), color)
 
-func _place_unit(unit: Unit) -> void:
+func _place_unit(unit: HexUnit) -> void:
 	for hex in unit.get_hexes():
 		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:
 			unitgrid[pos.x][pos.y] = 1;
 
-func _remove_unit(unit: Unit) -> void:
+func _remove_unit(unit: HexUnit) -> void:
 	for hex in unit.get_hexes():
 		var pos = _re_util.cube_to_oddq(hex.cube_coords)
 		if pos.x >= 0 and pos.x < width and pos.y >= 0 and pos.y < height:

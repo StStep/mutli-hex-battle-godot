@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://battlefield/Battlefield.gd" type="Script" id=1]
+[ext_resource path="res://battlefield/HexBattlefield.gd" type="Script" id=1]
 [ext_resource path="res://tiles/grass-tile.tres" type="TileSet" id=2]
 [ext_resource path="res://tiles/forest-tiles.tres" type="TileSet" id=3]
 

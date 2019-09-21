@@ -11,9 +11,9 @@ func _unhandled_input( event ):
 
 	if event.is_action_pressed("ui_accept"):
 		print("Toggle movement mode")
-		if u1.state == Unit.UnitState.MOVING:
-			u1.state = Unit.UnitState.PLACING
+		if u1.state == HexUnit.UnitState.MOVING:
+			u1.state = HexUnit.UnitState.PLACING
 			$CanvasLayer/Text.text = "DEPLOYING"
 		else:
-			u1.state = Unit.UnitState.MOVING
+			u1.state = HexUnit.UnitState.MOVING
 			$CanvasLayer/Text.text = "MOVING"

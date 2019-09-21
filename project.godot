@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node",
-"class": "Battlefield",
-"language": "GDScript",
-"path": "res://battlefield/Battlefield.gd"
-}, {
 "base": "Area2D",
 "class": "Dragable",
 "language": "GDScript",
@@ -24,22 +19,27 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://decorators/FollowOnClickable.gd"
 }, {
+"base": "Node",
+"class": "HexBattlefield",
+"language": "GDScript",
+"path": "res://battlefield/HexBattlefield.gd"
+}, {
 "base": "Node2D",
 "class": "HexShape",
 "language": "GDScript",
-"path": "res://units/HexShape.gd"
+"path": "res://battlefield/hexunit/HexShape.gd"
 }, {
 "base": "Node2D",
-"class": "Unit",
+"class": "HexUnit",
 "language": "GDScript",
-"path": "res://units/Unit.gd"
+"path": "res://battlefield/hexunit/HexUnit.gd"
 } ]
 _global_script_class_icons={
-"Battlefield": "",
 "Dragable": "",
 "FollowOnClickable": "",
+"HexBattlefield": "",
 "HexShape": "",
-"Unit": ""
+"HexUnit": ""
 }
 
 [application]

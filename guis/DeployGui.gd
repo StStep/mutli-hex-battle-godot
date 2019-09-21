@@ -32,7 +32,7 @@ func _on_BtMakeLine_pressed() -> void:
 	if not _enabled: return
 	if _linecnt <= 0: return
 
-	var _u: Unit = create_unit.call_func("line")
+	var _u = create_unit.call_func("line")
 	_linecnt -= 1
 	_nd_linecount.text = str(_linecnt)
 
@@ -40,7 +40,7 @@ func _on_BtMakeTroop_pressed() -> void:
 	if not _enabled: return
 	if _troopcnt <= 0: return
 
-	var _u: Unit = create_unit.call_func("troop")
+	var _u = create_unit.call_func("troop")
 	_troopcnt -= 1
 	_nd_troopcount.text = str(_troopcnt)
 
@@ -48,6 +48,6 @@ func _on_BtMakeRegiment_pressed() -> void:
 	if not _enabled: return
 	if _regcnt <= 0: return
 
-	var _u: Unit = create_unit.call_func("regiment")
+	var _u = create_unit.call_func("regiment")
 	_regcnt -= 1
 	_nd_regcount.text = str(_regcnt)

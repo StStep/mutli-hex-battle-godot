@@ -1,12 +1,12 @@
 extends Node2D
-class_name Unit
+class_name HexUnit
 
-enum UnitState {NONE, PLACING, MOVING}
+var _re_unit = preload("res://battlefield/Unit.gd")
 
 signal placed(unit)
 signal picked(unit)
 
-var state = UnitState.NONE setget _set_state, _get_state
+var state = _re_unit.State.NONE setget _set_state, _get_state
 var legalloc: bool = true setget ,_get_legalloc
 var fr_are_hexes_empty: FuncRef
 var fr_draw_hex: FuncRef
@@ -40,9 +40,9 @@ func _set_state(value) -> void:
 
 	# Prev State
 	match(state):
-		UnitState.PLACING:
+		_re_unit.State.PLACING:
 			$Dragable.can_drag = false
-		UnitState.MOVING:
+		_re_unit.State.MOVING:
 			$Preview.hide()
 			$FollowOnClickable.enabled = false
 			for p in _drawnHexes:
@@ -53,9 +53,9 @@ func _set_state(value) -> void:
 
 	# Future State
 	match(value):
-		UnitState.PLACING:
+		_re_unit.State.PLACING:
 			$Dragable.can_drag = true
-		UnitState.MOVING:
+		_re_unit.State.MOVING:
 			$Preview.show()
 			$Preview.set_pos_to($HexShape.global_position)
 			$Preview.set_front_to_deg($HexShape.front_dir_deg)
