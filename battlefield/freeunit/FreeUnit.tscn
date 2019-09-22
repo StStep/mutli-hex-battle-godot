@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://battlefield/freeunit/FreeUnit.cs" type="Script" id=1]
+[ext_resource path="res://decorators/Dragable.gd" type="Script" id=2]
+[ext_resource path="res://decorators/FollowOnClickable.gd" type="Script" id=3]
+
+[node name="FreeUnit" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Dragable" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
+script = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Dragable"]
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="FollowOnClickable" type="Area2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="FollowOnClickable"]
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
