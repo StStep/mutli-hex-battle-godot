@@ -70,7 +70,7 @@ func _unhandled_input(event) -> void:
 				emit_signal("started", self)
 			_following = true
 		# Stop everything
-		elif _following and not _mouse_in and event.pressed:
+		elif _following and event.pressed:
 			_following = false
 			emit_signal("ended", self)
 	else:
