@@ -23,11 +23,11 @@ public class FreeBattlefield : Node
     public void CreateUnit(String type)
     {
         var u = _freeUnit.Instance() as FreeUnit;
-        u.GetNode("Dragable").Set("can_drag", true);
-        u.GetNode("Dragable").Set("dragging", true);
+        GetNode("Units").AddChild(u);
+        u.CanDrag = true;
+        u.Dragging = true;
         u.Connect("Picked", this, "PickedUnit");
         u.Connect("Placed", this, "PlacedUnit");
-        GetNode("Units").AddChild(u);
         _units.Add(u);
     }
 

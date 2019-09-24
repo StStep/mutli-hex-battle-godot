@@ -4,23 +4,80 @@
 [ext_resource path="res://decorators/Dragable.gd" type="Script" id=2]
 [ext_resource path="res://decorators/FollowOnClickable.gd" type="Script" id=3]
 
-[node name="FreeUnit" type="Node2D"]
+[node name="FreeUnit" type="Node"]
 script = ExtResource( 1 )
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
+[node name="Primary" type="Polygon2D" parent="."]
+color = Color( 0.603922, 0.937255, 0.835294, 1 )
 polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
 
-[node name="Dragable" type="Area2D" parent="."]
+[node name="Dragable" type="Area2D" parent="Primary"]
+editor/display_folded = true
 monitoring = false
 monitorable = false
 script = ExtResource( 2 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Dragable"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Primary/Dragable"]
 polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
 
-[node name="FollowOnClickable" type="Area2D" parent="."]
+[node name="FollowOnClickable" type="Area2D" parent="Primary"]
 script = ExtResource( 3 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="FollowOnClickable"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Primary/FollowOnClickable"]
+z_index = 1
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Preview1" type="Polygon2D" parent="Primary"]
+visible = false
+color = Color( 0.603922, 0.937255, 0.835294, 0.509804 )
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Line2D1" type="Line2D" parent="Primary/Preview1"]
+position = Vector2( 8.542, 0.872 )
+scale = Vector2( 1.19757, 0.951204 )
+points = PoolVector2Array( -7.26099, -10.4037, -6.99044, 12.8638 )
+width = 5.0
+texture_mode = 23
+
+[node name="FollowOnClickable" type="Area2D" parent="Primary/Preview1"]
+editor/display_folded = true
+script = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Primary/Preview1/FollowOnClickable"]
+z_index = 1
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Preview2" type="Polygon2D" parent="Primary/Preview1"]
+visible = false
+color = Color( 0.603922, 0.937255, 0.835294, 0.509804 )
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Line2D2" type="Line2D" parent="Primary/Preview1/Preview2"]
+points = PoolVector2Array( -9.29014, -8.91562, 8.56632, -8.23924, 8.7016, 3.12396, -9.29014, 1.90648, -8.3432, 11.3758, 7.88994, 12.3227 )
+width = 5.0
+texture_mode = 23
+
+[node name="FollowOnClickable" type="Area2D" parent="Primary/Preview1/Preview2"]
+editor/display_folded = true
+script = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Primary/Preview1/Preview2/FollowOnClickable"]
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Preview3" type="Polygon2D" parent="Primary/Preview1/Preview2"]
+visible = false
+color = Color( 0.603922, 0.937255, 0.835294, 0.509804 )
+polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
+
+[node name="Line2D3" type="Line2D" parent="Primary/Preview1/Preview2/Preview3"]
+position = Vector2( 11.65, 0 )
+points = PoolVector2Array( -21.3297, -9.45673, -6.31406, -9.45673, -5.77296, 0.283161, -19.1653, 0.147884, -5.90823, 0.147884, -5.90823, 10.2936, -20.3828, 10.2936 )
+width = 5.0
+texture_mode = 23
+
+[node name="FollowOnClickable" type="Area2D" parent="Primary/Preview1/Preview2/Preview3"]
+script = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Primary/Preview1/Preview2/Preview3/FollowOnClickable"]
 polygon = PoolVector2Array( 50, -15, 50, 15, -50, 15, -50, -15 )
 
